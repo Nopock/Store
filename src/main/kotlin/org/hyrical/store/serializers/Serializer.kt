@@ -1,4 +1,4 @@
-package org.hyrical.store.serializeres
+package org.hyrical.store.serializers
 
 abstract class Serializer {
 

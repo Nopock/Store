@@ -7,7 +7,7 @@ import org.hyrical.store.DataStoreController
 import org.hyrical.store.Storable
 import org.hyrical.store.constants.DataTypeResources
 import org.hyrical.store.repository.AsyncRepository
-import org.hyrical.store.serializeres.Serializers
+import org.hyrical.store.serializers.Serializers
 import java.lang.UnsupportedOperationException
 import java.util.concurrent.CompletableFuture
 
