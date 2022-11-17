@@ -1,8 +1,7 @@
 <h1 align="center">Welcome to Store 👋</h1>
 <p>
   <img alt="Version" src="https://img.shields.io/badge/version-1.0.0-blue.svg?cacheSeconds=2592000" />
-  <img src="https://img.shields.io/badge/npm-%3E%3D5.5.0-blue.svg" />
-  <img src="https://img.shields.io/badge/node-%3E%3D9.3.0-blue.svg" />
+  <img src="https://img.shields.io/badge/kotlin-%3E%3D5.1.7.20-blue.svg" />
   <a href="https://github.com/Nopock/Store#Usage" target="_blank">
     <img alt="Documentation" src="https://img.shields.io/badge/documentation-yes-brightgreen.svg" />
   </a>
@@ -11,9 +10,6 @@
   </a>
   <a href="https://github.com/Nopock/Store/blob/main/LICENSE" target="_blank">
     <img alt="License: MIT" src="https://img.shields.io/github/license/Nopock/Store" />
-  </a>
-  <a href="https://twitter.com/RealRepation" target="_blank">
-    <img alt="Twitter: RealRepation" src="https://img.shields.io/twitter/follow/RealRepation.svg?style=social" />
   </a>
 </p>
 
