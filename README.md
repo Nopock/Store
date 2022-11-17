@@ -1,7 +1,7 @@
 <h1 align="center">Welcome to Store 👋</h1>
 <p>
   <img alt="Version" src="https://img.shields.io/badge/version-1.0.0-blue.svg?cacheSeconds=2592000" />
-  <img src="https://img.shields.io/badge/kotlin-%3E%3D5.1.7.20-blue.svg" />
+  <img src="https://img.shields.io/badge/kotlin-1.7.20-blue.svg" />
   <a href="https://github.com/Nopock/Store#Usage" target="_blank">
     <img alt="Documentation" src="https://img.shields.io/badge/documentation-yes-brightgreen.svg" />
   </a>
