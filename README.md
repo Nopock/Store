@@ -12,7 +12,7 @@
     <img alt="License: MIT" src="https://img.shields.io/github/license/Nopock/Store" />
   </a>
   
-  [![Java CI](https://github.com/Nopock/Store/actions/workflows/gradle.yml/badge.svg)](https://github.com/Nopock/Store/actions/workflows/gradle.yml)]
+  [![Java CI](https://github.com/Nopock/Store/actions/workflows/gradle.yml/badge.svg)](https://github.com/Nopock/Store/actions/workflows/gradle.yml)
 </p>
 
 > An AIO data storage library.
