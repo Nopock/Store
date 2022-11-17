@@ -9,6 +9,7 @@ import redis.clients.jedis.Jedis
 import java.lang.UnsupportedOperationException
 import java.util.concurrent.CompletableFuture
 
+// TODO: Add documentation
 class AsyncRedisRepository<T : Storable>(private val controller: DataStoreController<T>) : AsyncRepository<T> {
 
     private val jedis: Jedis = DataTypeResources.redisClient ?: throw UnsupportedOperationException("There was an error whilst enabling a redis repository. To fix this call DataTypeResources#enableRedisRepositories.")
