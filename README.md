@@ -29,7 +29,7 @@
     }
     
     dependencies {
-        implementation("com.github.Nopock:Store:1.0.0")
+        implementation("com.github.Nopock:Store:[Latest Commit]")
     }
 ```
 
