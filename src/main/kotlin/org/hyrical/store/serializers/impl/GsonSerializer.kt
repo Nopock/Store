@@ -7,7 +7,9 @@ import org.hyrical.store.serializers.Serializer
 class GsonSerializer : Serializer() {
     val gson = GsonBuilder().setLongSerializationPolicy(LongSerializationPolicy.STRING).create()
 
-    override fun <T> deserialize(json: String, type: Class<T>): T? {
+    override fun <T> deserialize(json: String?, type: Class<T>): T? {
+        if (json == null) return null
+
         return gson.fromJson(json, type)
     }
 

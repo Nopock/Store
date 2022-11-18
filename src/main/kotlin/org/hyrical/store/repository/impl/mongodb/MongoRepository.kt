@@ -26,9 +26,7 @@ class MongoRepository<T : Storable>(private val controller: DataStoreController<
     }
 
     override fun search(id: String): T? {
-        val s = collection.find(Filters.eq("_id", id)).first() ?: return null
-
-        return serializer.deserialize(s.toJson(), controller.classType)
+        return serializer.deserialize(collection.find(Filters.eq("_id", id)).first()?.toJson(), controller.classType)
     }
 
     override fun delete(id: String) {

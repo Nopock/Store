@@ -7,6 +7,7 @@ import org.hyrical.store.repository.AsyncRepository
 import org.hyrical.store.repository.Repository
 import org.hyrical.store.type.StorageType
 import java.lang.reflect.ParameterizedType
+import java.util.UUID
 
 /**
  * The object that handles creating new [Repository]'s and
@@ -32,8 +33,9 @@ class DataStoreController<T : Storable>(private val type: StorageType, val class
          * @see [DataStoreController]
          */
         inline fun <reified T : Storable> of(type: StorageType, cachingStrategy: CachingStrategy = CachingStrategy.NONE): DataStoreController<T> {
-            return DataStoreController(type, T::class.java)
-                .enableCachingStrategy(cachingStrategy)
+            return DataStoreController(type, T::class.java).apply {
+                enableCachingStrategy(cachingStrategy)
+            }
         }
     }
 
@@ -50,7 +52,7 @@ class DataStoreController<T : Storable>(private val type: StorageType, val class
      *
      * @param [cachingStrategy] The [CachingStrategy] to be used.
      */
-    fun enableCachingStrategy(cachingStrategy: CachingStrategy) = apply {
+    fun enableCachingStrategy(cachingStrategy: CachingStrategy) {
         this.cachingStrategy = cachingStrategy
     }
 
@@ -60,7 +62,7 @@ class DataStoreController<T : Storable>(private val type: StorageType, val class
      *
      * @param [directory] The directory to be used.
      */
-    fun bindFlatFileDirectory(directory: String) = apply {
+    fun bindFlatFileDirectory(directory: String)  {
         if (type == StorageType.FLAT_FILE) {
             this.directory = directory
         }
@@ -71,7 +73,7 @@ class DataStoreController<T : Storable>(private val type: StorageType, val class
      * initializes the [Repository] and the [AsyncRepository] for the
      * current [StorageType]
      */
-    fun construct(): DataStoreController<T> = apply {
+    fun construct() {
         if (this.cache != null) throw java.lang.UnsupportedOperationException("This class has already been constructed.")
 
         this.repository = type.build(this)
