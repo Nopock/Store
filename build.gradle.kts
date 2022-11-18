@@ -2,8 +2,9 @@ import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
 plugins {
     kotlin("jvm") version "1.7.21"
-    //id("org.jetbrains.dokka") version "1.7.20"
+    id("org.jetbrains.dokka") version "1.7.20"
     id("maven-publish")
+    id("java-library")
 }
 
 group = "org.hyrical"
@@ -28,6 +29,14 @@ tasks.test {
 tasks.withType<KotlinCompile> {
     kotlinOptions.jvmTarget = "1.8"
 }
+
+/* TODO: Not sure how to implement this yet
+java {
+    registerFeature("mongoDBSupport") {
+        usingSourceSet(sourceSets["main"])
+    }
+}
+ */
 
 publishing {
     publications {

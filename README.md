@@ -21,8 +21,19 @@
 
 - Java 8
 
-
 ## Installation
+
+```gradle
+    repositories {
+        maven("https://jitpack.io")
+    }
+    
+    dependencies {
+        implementation("com.github.Nopock:Store:1.0.0")
+    }
+```
+
+## Build Yourself
 
 ```sh
 ./gradlew build
