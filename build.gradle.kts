@@ -16,7 +16,7 @@ repositories {
 dependencies {
     implementation("redis.clients:jedis:4.3.1")
     implementation("org.mongodb:mongo-java-driver:3.12.11")
-    implementation("org.slf4j:slf4j-api:2.0.3")
+    implementation("org.slf4j:slf4j-api:2.0.4")
     //dokkaHtmlPlugin("org.jetbrains.dokka:kotlin-as-java-plugin:1.7.20")
     testImplementation(kotlin("test"))
 }
