@@ -74,7 +74,7 @@ class DataStoreController<T : Storable>(private val type: StorageType, val class
      * current [StorageType]
      */
     fun construct() {
-        if (this.cache != null) throw java.lang.UnsupportedOperationException("This class has already been constructed.")
+        if (this.cache != null) throw java.lang.UnsupportedOperationException("This controller has already been constructed.")
 
         this.repository = type.build(this)
         this.asyncRepository = type.buildAsync(this)
