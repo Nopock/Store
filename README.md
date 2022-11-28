@@ -58,6 +58,17 @@
     data class ExampleData(override val identifier: String, val name: String, val age: Int) : Storable
 ```
 
+## Roadmap
+
+- Better MongoDB and redis connections
+- Flatfile Repositories
+- Implement a cache for dif types
+- Remove the need to invoke DataStoreController#construct
+- Add support for kotlinx.coroutines
+- Add support for jackson
+- Add support for kotlinx.serialization
+- Add support for optional depedencies
+
 ## Author
 
 👤 **Nathan Weisz**
