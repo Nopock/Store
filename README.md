@@ -3,10 +3,10 @@
   <img alt="Version" src="https://img.shields.io/badge/version-1.0.0-blue.svg?cacheSeconds=2592000" />
   <img src="https://img.shields.io/badge/kotlin-1.7.21-blue.svg" />
   <a href="https://github.com/Nopock/Store#Usage" target="_blank">
-    <img alt="Documentation" src="https://img.shields.io/badge/Documentation-yes-brightgreen.svg" />
+    <img alt="Documentation" src="https://img.shields.io/badge/documented-yes-brightgreen.svg" />
   </a>
   <a href="https://github.com/Nopcok/Store/graphs/commit-activity" target="_blank">
-    <img alt="Maintenance" src="https://img.shields.io/badge/Maintained%3F-yes-brightgreen.svg" />
+    <img alt="Maintenance" src="https://img.shields.io/badge/maintained%3F-yes-brightgreen.svg" />
   </a>
   <a href="https://github.com/Nopock/Store/blob/main/LICENSE" target="_blank">
     <img alt="License: MIT" src="https://img.shields.io/github/license/Nopock/Store" />
