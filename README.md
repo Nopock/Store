@@ -5,8 +5,8 @@
   <a href="https://github.com/Nopock/Store#Usage" target="_blank">
     <img alt="Documentation" src="https://img.shields.io/badge/documented-yes-brightgreen.svg" />
   </a>
-  <a href="https://github.com/Nopcok/Store/graphs/commit-activity" target="_blank">
-    <img alt="Maintenance" src="https://img.shields.io/badge/maintained%3F-yes-brightgreen.svg" />
+  <a href="https://github.com/Nopock/Store/graphs/commit-activity" target="_blank">
+    <img alt="Maintenance" src="https://img.shields.io/badge/maintained-yes-brightgreen.svg" />
   </a>
   <a href="https://github.com/Nopock/Store/blob/main/LICENSE" target="_blank">
     <img alt="License: MIT" src="https://img.shields.io/github/license/Nopock/Store" />
