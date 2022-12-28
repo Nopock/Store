@@ -41,7 +41,7 @@ enum class StorageType {
 
     FLAT_FILE() {
         override fun <T : Storable> build(controller: DataStoreController<T>): Repository<T> {
-            return FlatFileRepository(controller)
+            return FlatFileRepository()
         }
 
         override fun <T : Storable> buildAsync(controller: DataStoreController<T>): AsyncRepository<T> {
