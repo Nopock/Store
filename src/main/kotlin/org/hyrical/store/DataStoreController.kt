@@ -37,6 +37,13 @@ class DataStoreController<T : Storable>(private val type: StorageType, val class
                 enableCachingStrategy(cachingStrategy)
             }
         }
+
+        @JvmStatic
+        fun <T : Storable> of(type: StorageType, t: Class<T>, cachingStrategy: CachingStrategy = CachingStrategy.NONE): DataStoreController<T> {
+            return DataStoreController<T>(type, t).apply {
+                enableCachingStrategy(cachingStrategy)
+            }
+        }
     }
 
     lateinit var repository: Repository<T>
