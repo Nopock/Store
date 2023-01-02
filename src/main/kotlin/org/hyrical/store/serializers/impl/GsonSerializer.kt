@@ -5,7 +5,7 @@ import com.google.gson.LongSerializationPolicy
 import org.hyrical.store.serializers.Serializer
 
 class GsonSerializer : Serializer() {
-    val gson = GsonBuilder().setLongSerializationPolicy(LongSerializationPolicy.STRING).create()
+    val gson = GsonBuilder().setLongSerializationPolicy(LongSerializationPolicy.STRING).serializeNulls().create()
 
     override fun <T> deserialize(json: String?, type: Class<T>): T? {
         if (json == null) return null
