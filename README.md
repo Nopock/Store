@@ -61,7 +61,6 @@
 ## Roadmap
 
 - Better MongoDB and redis connections
-- Flatfile Repositories
 - Implement a cache for dif types
 - Remove the need to invoke DataStoreController#construct
 - Add support for kotlinx.coroutines
