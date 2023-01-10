@@ -31,6 +31,8 @@
     dependencies {
         implementation("com.github.Nopock:Store:[Latest Commit]")
     }
+    
+    // You will need to include MongoDB / redis yourself as I do not want to fatten the jar
 ```
 
 ## Build Yourself
