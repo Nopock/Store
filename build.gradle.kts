@@ -21,7 +21,7 @@ dependencies {
     //dokkaHtmlPlugin("org.jetbrains.dokka:kotlin-as-java-plugin:1.7.20")
     testImplementation(kotlin("test"))
     compileOnly("org.jetbrains.kotlinx:kotlinx-serialization-json:1.4.1")
-    compileOnly("io.projectreactor:reactor-core:3.5.1")
+    compileOnly("io.projectreactor:reactor-core:3.5.2")
 }
 
 tasks.test {
