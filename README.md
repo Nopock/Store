@@ -51,7 +51,6 @@
     DataTypeResources.enableMongoRepositories("localhost", 27017, "Database")
 
     val controller = DataStoreController.of<ExampleData>(StorageType.MONGO)
-    controller.construct()
 
     controller.repository.save(ExampleData(UUID.randomUUID().toString(), "Hello World!", 10))
 ```

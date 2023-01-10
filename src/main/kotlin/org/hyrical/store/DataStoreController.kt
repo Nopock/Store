@@ -46,6 +46,15 @@ class DataStoreController<T : Storable>(private val type: StorageType, val class
         }
     }
 
+    init {
+        if (this.cache != null) throw java.lang.UnsupportedOperationException("What the fuck? How did you get here bro...")
+
+        this.repository = type.build(this)
+        this.asyncRepository = type.buildAsync(this)
+
+        this.cache = cachingStrategy.constructCache()
+    }
+
     lateinit var repository: Repository<T>
     lateinit var asyncRepository: AsyncRepository<T>
 
@@ -73,19 +82,5 @@ class DataStoreController<T : Storable>(private val type: StorageType, val class
         if (type == StorageType.FLAT_FILE) {
             this.directory = directory
         }
-    }
-
-    /**
-     * Constructs the current [DataStoreController] object and
-     * initializes the [Repository] and the [AsyncRepository] for the
-     * current [StorageType]
-     */
-    fun construct() {
-        if (this.cache != null) throw java.lang.UnsupportedOperationException("This controller has already been constructed.")
-
-        this.repository = type.build(this)
-        this.asyncRepository = type.buildAsync(this)
-
-        this.cache = cachingStrategy.constructCache()
     }
 }
