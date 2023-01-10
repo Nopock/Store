@@ -20,6 +20,8 @@ dependencies {
     implementation("org.slf4j:slf4j-api:2.0.6")
     //dokkaHtmlPlugin("org.jetbrains.dokka:kotlin-as-java-plugin:1.7.20")
     testImplementation(kotlin("test"))
+    compileOnly("org.jetbrains.kotlinx:kotlinx-serialization-json:1.4.1")
+    compileOnly("io.projectreactor:reactor-core:3.5.1")
 }
 
 tasks.test {
@@ -29,14 +31,6 @@ tasks.test {
 tasks.withType<KotlinCompile> {
     kotlinOptions.jvmTarget = "1.8"
 }
-
-/* TODO: Not sure how to implement this yet
-java {
-    registerFeature("mongoDBSupport") {
-        usingSourceSet(sourceSets["main"])
-    }
-}
- */
 
 publishing {
     publications {
