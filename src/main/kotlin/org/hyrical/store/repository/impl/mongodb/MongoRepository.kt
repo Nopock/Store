@@ -25,14 +25,25 @@ class MongoRepository<T : Storable>(private val controller: DataStoreController<
         collection
     }
 
+    /**
+     * @param [id] The ID of the [T] object that you are searching for.
+     *
+     * @return [T?] The [T] object if found else null.
+     */
     override fun search(id: String): T? {
         return serializer.deserialize(collection.find(Filters.eq("_id", id)).first()?.toJson(), controller.classType)
     }
 
+    /**
+     * @param [id] The ID of the [T] object to delete.
+     */
     override fun delete(id: String) {
         collection.deleteOne(Filters.eq("_id", id))
     }
 
+    /**
+     * @param [keys] A vararg of keys/ids that will be deleted.
+     */
     override fun deleteMany(vararg keys: String) {
         collection.deleteMany(Filters.`in`("_id", keys))
     }
@@ -44,6 +55,9 @@ class MongoRepository<T : Storable>(private val controller: DataStoreController<
         return collection.find().map { serializer.deserialize(it.toJson(), controller.classType)!! }.toList()
     }
 
+    /**
+     * @return [List<T>] A list of all the objects in the repository.
+     */
     override fun saveMany(vararg objects: T): List<T> {
         objects.forEach {
             save(it)
@@ -51,6 +65,11 @@ class MongoRepository<T : Storable>(private val controller: DataStoreController<
         return objects.toList()
     }
 
+    /**
+     * @param [t] The object to save.
+     *
+     * @return [T] The object saved.
+     */
     override fun save(t: T): T {
         collection.updateOne(Filters.eq("_id", t.identifier), Document("\$set",  Document.parse(serializer.serialize(t))), UpdateOptions().upsert(true))
         return t

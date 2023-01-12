@@ -16,24 +16,35 @@ class AsyncFlatFileRepository<T : Storable>(controller: DataStoreController<T>) 
 
     val cache: MutableList<T> = mutableListOf()
 
+    /**
+     * @param id The ID of the [T] object that you are searching for.
+     *
+     * @return [CompletableFuture<T>] The [T] object wrapped in CompletableFuture if found else null
+     */
     override fun search(id: String): CompletableFuture<T?> {
         return CompletableFuture.supplyAsync {
             cache.firstOrNull { it.identifier == id }
         }
     }
 
+    /**
+     * @param id The ID of the [T] object to delete.
+     */
     override fun delete(id: String) {
         cache.removeIf { it.identifier == id }
         file.writeText(Serializers.activeSerialize.serialize(cache)!!)
     }
 
+    /**
+     * @param keys A vararg of keys/ids that will be deleted.
+     */
     override fun deleteMany(vararg keys: String) {
         cache.removeIf { keys.contains(it.identifier) }
         file.writeText(Serializers.activeSerialize.serialize(cache)!!)
     }
 
     /**
-     * @return [List<T>] A list of all the objects in the repository.
+     * @return [CompletableFuture<List<T>>] A list of all the objects in the repository.
      */
     override fun findAll(): CompletableFuture<List<T>> {
         return CompletableFuture.supplyAsync {
@@ -41,6 +52,11 @@ class AsyncFlatFileRepository<T : Storable>(controller: DataStoreController<T>) 
         }
     }
 
+    /**
+     * @param objects A vararg of [T]'s that need to be saved.
+     *
+     * @return [CompletableFuture<List<T>>] A list of the objects saved.
+     */
     override fun saveMany(vararg objects: T): CompletableFuture<List<T>> {
         return CompletableFuture.supplyAsync {
             cache.addAll(objects)
@@ -49,6 +65,11 @@ class AsyncFlatFileRepository<T : Storable>(controller: DataStoreController<T>) 
         }
     }
 
+    /**
+     * @param t The object to save.
+     *
+     * @return [CompletableFuture<T>] The saved object wrapped in a CompletableFuture.
+     */
     override fun save(t: T): CompletableFuture<T> {
         return CompletableFuture.supplyAsync {
             cache.add(t)

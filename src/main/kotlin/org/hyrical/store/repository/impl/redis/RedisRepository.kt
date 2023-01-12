@@ -16,14 +16,25 @@ class RedisRepository<T : Storable>(private val controller: DataStoreController<
 
     private val id = controller.classType.simpleName
 
+    /**
+     * @param [id] The ID of the [T] object that you are searching for.
+     *
+     * @return [T?] The [T] object if found else null.
+     */
     override fun search(id: String): T? {
         return serializer.deserialize(jedis.hget(this.id, id), controller.classType)
     }
 
+    /**
+     * @param [id] The ID of the [T] object to delete.
+     */
     override fun delete(id: String) {
         jedis.hdel(this.id, id)
     }
 
+    /**
+     * @param [keys] A vararg of keys/ids that will be deleted.
+     */
     override fun deleteMany(vararg keys: String) {
         jedis.hdel(this.id, *keys)
     }
@@ -35,12 +46,22 @@ class RedisRepository<T : Storable>(private val controller: DataStoreController<
         return jedis.hgetAll(this.id).values.map { serializer.deserialize(it, controller.classType)!! }
     }
 
+    /**
+     * @param [objects] A vararg of [T]'s that need to be saved.
+     *
+     * @return [List<T>] A list of the objects saved.
+     */
     override fun saveMany(vararg objects: T): List<T> {
         return objects.toList().also {
             jedis.hmset(this.id, objects.associate { it.identifier to serializer.serialize(it) })
         }
     }
 
+    /**
+     * @param [t] The object to save.
+     *
+     * @return [T] The object saved.
+     */
     override fun save(t: T): T {
         return t.also {
             jedis.hset(this.id, t.identifier, serializer.serialize(t))

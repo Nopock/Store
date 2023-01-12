@@ -25,18 +25,29 @@ class AsyncMongoRepository<T : Storable>(private val controller: DataStoreContro
         collection
     }
 
+    /**
+     * @param id The ID of the [T] object that you are searching for.
+     *
+     * @return [CompletableFuture<T>] The [T] object wrapped in CompletableFuture if found else null
+     */
     override fun search(id: String): CompletableFuture<T?> {
         return CompletableFuture.supplyAsync {
             return@supplyAsync serializer.deserialize(collection.find(Filters.eq("_id", id)).first()?.toJson() ?: return@supplyAsync null, controller.classType)
         }
     }
 
+    /**
+     * @param id The ID of the [T] object to delete.
+     */
     override fun delete(id: String) {
         CompletableFuture.runAsync {
             collection.deleteOne(Filters.eq("_id", id))
         }
     }
 
+    /**
+     * @param keys A vararg of keys/ids that will be deleted.
+     */
     override fun deleteMany(vararg keys: String) {
         CompletableFuture.runAsync {
             collection.deleteMany(Filters.`in`("_id", keys))
@@ -44,7 +55,7 @@ class AsyncMongoRepository<T : Storable>(private val controller: DataStoreContro
     }
 
     /**
-     * @return [List<T>] A list of all the objects in the repository.
+     * @return [CompletableFuture<List<T>>] A list of all the objects in the repository.
      */
     override fun findAll(): CompletableFuture<List<T>> {
         return CompletableFuture.supplyAsync {
@@ -52,6 +63,11 @@ class AsyncMongoRepository<T : Storable>(private val controller: DataStoreContro
         }
     }
 
+        /**
+     * @param objects A vararg of [T]'s that need to be saved.
+     *
+     * @return [CompletableFuture<List<T>>] A list of the objects saved.
+     */
     override fun saveMany(vararg objects: T): CompletableFuture<List<T>> {
         return CompletableFuture.supplyAsync {
             objects.forEach {
@@ -62,6 +78,11 @@ class AsyncMongoRepository<T : Storable>(private val controller: DataStoreContro
         }
     }
 
+    /**
+     * @param t The object to save.
+     *
+     * @return [CompletableFuture<T>] The saved object wrapped in a CompletableFuture.
+     */
     override fun save(t: T): CompletableFuture<T> {
         return CompletableFuture.supplyAsync {
             collection.updateOne(Filters.eq("_id", t.identifier), Document("\$set",  Document.parse(serializer.serialize(t))))
