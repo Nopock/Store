@@ -3,11 +3,13 @@ package org.hyrical.store.type
 import org.hyrical.store.DataStoreController
 import org.hyrical.store.Storable
 import org.hyrical.store.repository.AsyncRepository
+import org.hyrical.store.repository.ReactiveRepository
 import org.hyrical.store.repository.Repository
 import org.hyrical.store.repository.impl.flatfile.AsyncFlatFileRepository
 import org.hyrical.store.repository.impl.flatfile.FlatFileRepository
 import org.hyrical.store.repository.impl.mongodb.AsyncMongoRepository
 import org.hyrical.store.repository.impl.mongodb.MongoRepository
+import org.hyrical.store.repository.impl.mongodb.ReactiveMongoRepository
 import org.hyrical.store.repository.impl.redis.AsyncRedisRepository
 import org.hyrical.store.repository.impl.redis.RedisRepository
 
@@ -27,6 +29,12 @@ enum class StorageType {
         override fun <T : Storable> buildAsync(controller: DataStoreController<T>): AsyncRepository<T> {
             return AsyncMongoRepository(controller)
         }
+
+        override fun <T : Storable> buildReactive(controller: DataStoreController<T>): ReactiveRepository<T> {
+            return ReactiveMongoRepository(controller)
+        }
+
+
     },
 
     REDIS() {
@@ -62,4 +70,11 @@ enum class StorageType {
      * @param [controller] The owning [DataStoreController]
      */
     abstract fun <T : Storable> buildAsync(controller: DataStoreController<T>): AsyncRepository<T>
+
+    /**
+     * Builds and initiates the [ReactiveRepository]
+     *
+     * @param [controller] The owning [DataStoreController]
+     */
+    abstract fun <T : Storable> buildReactive(controller: DataStoreController<T>): ReactiveRepository<T>
 }

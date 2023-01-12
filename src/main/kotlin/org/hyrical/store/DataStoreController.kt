@@ -46,20 +46,17 @@ class DataStoreController<T : Storable>(private val type: StorageType, val class
         }
     }
 
-    init {
-        if (this.cache != null) throw java.lang.UnsupportedOperationException("What the fuck? How did you get here bro...")
-
-        this.repository = type.build(this)
-        this.asyncRepository = type.buildAsync(this)
-
-        this.cache = cachingStrategy.constructCache()
+    // We do this lazy cause maybe they don't use a repo only async or reactive
+    val repository: Repository<T> by lazy {
+        type.build(this)
     }
 
-    lateinit var repository: Repository<T>
-    lateinit var asyncRepository: AsyncRepository<T>
+    val asyncRepository: AsyncRepository<T> by lazy {
+        type.buildAsync(this)
+    }
 
-    var cachingStrategy: CachingStrategy = CachingStrategy.NONE
-    var cache: ICachingStrategy<T>? = null
+    private var cachingStrategy: CachingStrategy = CachingStrategy.NONE
+    private var cache: ICachingStrategy<T>? = null
     var directory: String = ""
 
     /**
