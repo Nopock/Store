@@ -9,6 +9,7 @@ import redis.clients.jedis.Jedis
 import java.lang.UnsupportedOperationException
 import reactor.core.publisher.Flux
 import reactor.core.publisher.Mono
+import org.hyrical.store.repository.ReactiveRepository
 
 class ReactiveMongoRepository<T: Storable>(private val controller: DataStoreController<T>) : ReactiveRepository<T> {
 

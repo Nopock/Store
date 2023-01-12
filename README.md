@@ -32,15 +32,13 @@
         implementation("com.github.Nopock:Store:[Latest Commit]")
 
         // If you are using any redis repositories
-        compileOnly("redis.clients:jedis:4.3.1")
+        implementation("redis.clients:jedis:4.3.1")
 
         // If you are using any mongo repositories
-        compileOnly("org.mongodb:mongo-java-driver:3.12.11")
-        // If you are using kotlinx.serialization
-        compileOnly("org.jetbrains.kotlinx:kotlinx-serialization-json:1.4.1")
+        implementation("org.mongodb:mongo-java-driver:3.12.11")
 
         // If you are using reactive repositories
-        compileOnly("io.projectreactor:reactor-core:3.5.1")
+        implementation("io.projectreactor:reactor-core:3.5.1")
     }
     
     // You will need to include MongoDB / redis yourself as I do not want to fatten the jar

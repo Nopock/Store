@@ -2,7 +2,18 @@ package org.hyrical.store.type
 
 import org.hyrical.store.DataStoreController
 import org.hyrical.store.Storable
-import org.hyrical.store.repository.*
+import org.hyrical.store.repository.AsyncRepository
+import org.hyrical.store.repository.ReactiveRepository
+import org.hyrical.store.repository.Repository
+import org.hyrical.store.repository.impl.flatfile.AsyncFlatFileRepository
+import org.hyrical.store.repository.impl.flatfile.FlatFileRepository
+import org.hyrical.store.repository.impl.flatfile.ReactiveFlatFileRepository
+import org.hyrical.store.repository.impl.mongodb.AsyncMongoRepository
+import org.hyrical.store.repository.impl.mongodb.MongoRepository
+import org.hyrical.store.repository.impl.mongodb.ReactiveMongoRepository
+import org.hyrical.store.repository.impl.redis.AsyncRedisRepository
+import org.hyrical.store.repository.impl.redis.RedisRepository
+import org.hyrical.store.repository.impl.redis.ReactiveRedisRepository
 
 /**
  * The type of storage to be used whilst persisting data.
