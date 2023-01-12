@@ -6,7 +6,6 @@ import com.mongodb.client.model.UpdateOptions
 import org.bson.Document
 import org.hyrical.store.DataStoreController
 import org.hyrical.store.Storable
-import org.hyrical.store.constants.DataTypeResources
 import org.hyrical.store.repository.ReactiveRepository
 import org.hyrical.store.serializers.Serializers
 import reactor.core.publisher.Flux
@@ -18,13 +17,10 @@ class ReactiveMongoRepository<T: Storable>(private val controller: DataStoreCont
 
     private val serializer = Serializers.activeSerialize
 
-    var collection: MongoCollection<Document> = if (DataTypeResources.mongoCollections.containsKey(id)) {
-        DataTypeResources.mongoCollections[id]!!
-    } else {
-        val collection = DataTypeResources.mongoDatabase!!.getCollection(id)
-        DataTypeResources.mongoCollections[id] = collection
-        collection
-    }
+
+    val collection: MongoCollection<Document> = controller.connection?.useResourceWithReturn {
+        this.getCollection(controller.classType.simpleName)
+    } ?: throw UnsupportedOperationException("You did not provide a mongodatabase connection when initiating the owning DataStoreContrller.")
 
     /**
      * @param id The ID of the [T] object that you are searching for.

@@ -19,7 +19,7 @@ import java.util.UUID
  * @author Nopox
  * @since 11/10/22
  */
-class DataStoreController<T : Storable>(private val type: StorageType, val classType: Class<T>) {
+class DataStoreController<T : Storable>(private val type: StorageType, val classType: Class<T>, val connection: DatabaseConnection) {
 
     companion object {
 
@@ -32,8 +32,8 @@ class DataStoreController<T : Storable>(private val type: StorageType, val class
          *
          * @see [DataStoreController]
          */
-        inline fun <reified T : Storable> of(type: StorageType, cachingStrategy: CachingStrategy = CachingStrategy.NONE): DataStoreController<T> {
-            return DataStoreController(type, T::class.java).apply {
+        inline fun <reified T : Storable> of(type: StorageType, connection: DatabaseConnection? = null, cachingStrategy: CachingStrategy = CachingStrategy.NONE): DataStoreController<T> {
+            return DataStoreController(type, T::class.java, connection).apply {
                 enableCachingStrategy(cachingStrategy)
             }
         }

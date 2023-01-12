@@ -13,7 +13,7 @@ import org.hyrical.store.repository.ReactiveRepository
 
 class ReactiveRedisRepository<T: Storable>(private val controller: DataStoreController<T>) : ReactiveRepository<T> {
 
-    private val jedis: Jedis = DataTypeResources.redisClient ?: throw UnsupportedOperationException("There was an error whilst enabling a redis repository. To fix this call DataTypeResources#enableRedisRepositories.")
+    val connection = controller.connection ?: throw UnsupportedOperationException("Sushi is yum")
 
     private val serializer = Serializers.activeSerialize
 
@@ -25,7 +25,7 @@ class ReactiveRedisRepository<T: Storable>(private val controller: DataStoreCont
      * @return [Mono<T>] The [T] object wrapped in Mono if found else Mono.empty().
      */
     override fun search(id: String): Mono<T> {
-        return Mono.justOrEmpty(
+        return Mono.justOrEmpty(    
             serializer.deserialize(jedis.hget(this.id, id), controller.classType)
         )
     }

@@ -1,6 +1,6 @@
 package org.hyrical.store.connection.mongo
 
-class MongoCollection(val details: MongoURIDetails) : DatabaseConnection<MongoClient, MongoDatabase> {
+class MongoCollection(val details: AbstractMongoDetail) : DatabaseConnection<MongoClient, MongoDatabase> {
 
     lateinit var handle: MongoClient
 
