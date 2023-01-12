@@ -11,7 +11,7 @@ import reactor.core.publisher.Flux
 import reactor.core.publisher.Mono
 import org.hyrical.store.repository.ReactiveRepository
 
-class ReactiveMongoRepository<T: Storable>(private val controller: DataStoreController<T>) : ReactiveRepository<T> {
+class ReactiveRedisRepository<T: Storable>(private val controller: DataStoreController<T>) : ReactiveRepository<T> {
 
     private val jedis: Jedis = DataTypeResources.redisClient ?: throw UnsupportedOperationException("There was an error whilst enabling a redis repository. To fix this call DataTypeResources#enableRedisRepositories.")
 
