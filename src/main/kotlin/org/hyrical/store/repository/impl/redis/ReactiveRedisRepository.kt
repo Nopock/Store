@@ -2,18 +2,13 @@ package org.hyrical.store.repository.impl.redis
 
 import org.hyrical.store.DataStoreController
 import org.hyrical.store.Storable
-import org.hyrical.store.constants.DataTypeResources
-import org.hyrical.store.repository.Repository
+import org.hyrical.store.connection.redis.RedisConnection
 import org.hyrical.store.serializers.Serializers
-import redis.clients.jedis.Jedis
-import java.lang.UnsupportedOperationException
 import reactor.core.publisher.Flux
 import reactor.core.publisher.Mono
 import org.hyrical.store.repository.ReactiveRepository
 
-class ReactiveRedisRepository<T: Storable>(private val controller: DataStoreController<T>) : ReactiveRepository<T> {
-
-    val connection = controller.connection ?: throw UnsupportedOperationException("Sushi is yum")
+class ReactiveRedisRepository<T: Storable>(private val controller: DataStoreController<T>, val connection: RedisConnection) : ReactiveRepository<T> {
 
     private val serializer = Serializers.activeSerialize
 
@@ -25,8 +20,10 @@ class ReactiveRedisRepository<T: Storable>(private val controller: DataStoreCont
      * @return [Mono<T>] The [T] object wrapped in Mono if found else Mono.empty().
      */
     override fun search(id: String): Mono<T> {
-        return Mono.justOrEmpty(    
-            serializer.deserialize(jedis.hget(this.id, id), controller.classType)
+        return Mono.justOrEmpty(
+            connection.useResourceWithReturn {
+                serializer.deserialize(hget(this@ReactiveRedisRepository.id, id), controller.classType) ?: null
+            }
         )
     }
 
@@ -37,7 +34,9 @@ class ReactiveRedisRepository<T: Storable>(private val controller: DataStoreCont
      */
     override fun delete(id: String): Mono<Void> {
         return Mono.fromRunnable {
-            jedis.hdel(this.id, id)
+            connection.useResource {
+                hdel(this@ReactiveRedisRepository.id, id)
+            }
         }
     }
 
@@ -48,7 +47,9 @@ class ReactiveRedisRepository<T: Storable>(private val controller: DataStoreCont
      */
     override fun deleteMany(vararg keys: String): Mono<Void> {
         return Mono.fromRunnable {
-            jedis.hdel(this.id, *keys)
+            connection.useResource {
+                hdel(this@ReactiveRedisRepository.id, *keys)
+            }
         }
     }
 
@@ -57,7 +58,9 @@ class ReactiveRedisRepository<T: Storable>(private val controller: DataStoreCont
      */
     override fun findAll(): Flux<T> {
         return Flux.fromIterable(
-            jedis.hgetAll(this.id).values.map { serializer.deserialize(it, controller.classType)!! }
+            connection.useResourceWithReturn {
+                hgetAll(this@ReactiveRedisRepository.id).values.map { serializer.deserialize(it, controller.classType)!! }
+            }
         )
     }
 
@@ -68,7 +71,9 @@ class ReactiveRedisRepository<T: Storable>(private val controller: DataStoreCont
      */
     override fun saveMany(vararg objects: T): Flux<T> {
         return Flux.fromArray(objects.also {
-            jedis.hmset(this.id, objects.associate { it.identifier to serializer.serialize(it) })
+            connection.useResource {
+                hmset(this@ReactiveRedisRepository.id, objects.associate { it.identifier to serializer.serialize(it) })
+            }
         })
     }
 
@@ -80,7 +85,9 @@ class ReactiveRedisRepository<T: Storable>(private val controller: DataStoreCont
     override fun save(t: T): Mono<T> {
         return Mono.just(
             t.also {
-                jedis.hset(this.id, t.identifier, serializer.serialize(t))
+                connection.useResource {
+                    hset(this@ReactiveRedisRepository.id, t.identifier, serializer.serialize(t))
+                }
             }
         )
     }
