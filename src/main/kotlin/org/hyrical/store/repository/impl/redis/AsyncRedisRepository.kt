@@ -2,6 +2,7 @@ package org.hyrical.store.repository.impl.redis
 
 import org.hyrical.store.DataStoreController
 import org.hyrical.store.Storable
+import org.hyrical.store.connection.redis.RedisConnection
 import org.hyrical.store.constants.DataTypeResources
 import org.hyrical.store.repository.AsyncRepository
 import org.hyrical.store.serializers.Serializers
@@ -9,9 +10,7 @@ import redis.clients.jedis.Jedis
 import java.lang.UnsupportedOperationException
 import java.util.concurrent.CompletableFuture
 
-class AsyncRedisRepository<T : Storable>(private val controller: DataStoreController<T>) : AsyncRepository<T> {
-
-    private val jedis: Jedis = DataTypeResources.redisClient ?: throw UnsupportedOperationException("There was an error whilst enabling a redis repository. To fix this call DataTypeResources#enableRedisRepositories.")
+class AsyncRedisRepository<T : Storable>(private val controller: DataStoreController<T>, val connection: RedisConnection) : AsyncRepository<T> {
 
     private val serializer = Serializers.activeSerialize
 
@@ -24,7 +23,10 @@ class AsyncRedisRepository<T : Storable>(private val controller: DataStoreContro
      */
     override fun search(id: String): CompletableFuture<T?> {
         return CompletableFuture.supplyAsync {
-            val data = jedis.hget(this.id, id)
+            
+            val data = connection.useResourceWithReturn {
+                hget(this@AsyncRedisRepository.id, id)
+            }
             return@supplyAsync if (data == null) null else serializer.deserialize(data, controller.classType)
         }
     }

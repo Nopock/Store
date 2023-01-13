@@ -1,4 +1,6 @@
-package org.hyrial.store.connection.mongo.details.impl
+package org.hyrical.store.connection.mongo.details.impl
+
+import org.hyrical.store.connection.mongo.details.AbstractMongoDetail
 
 class NoAuthMongoDetails(
     val host: String = "127.0.0.1",

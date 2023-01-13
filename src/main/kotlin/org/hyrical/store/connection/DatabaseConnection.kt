@@ -1,8 +1,7 @@
 package org.hyrical.store.connection
 
-import java.io.Closable
 
-interface DatabaseConnection<C, R> : Closable {
+interface DatabaseConnection<C, R> {
 
     fun useResource(lambda: R.() -> Unit)
     fun <T> useResourceWithReturn(lambda: R.() -> T): T?

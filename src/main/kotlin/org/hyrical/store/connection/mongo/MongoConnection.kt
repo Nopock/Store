@@ -1,6 +1,12 @@
 package org.hyrical.store.connection.mongo
 
-class MongoCollection(val details: AbstractMongoDetail) : DatabaseConnection<MongoClient, MongoDatabase> {
+import com.mongodb.MongoClient
+import com.mongodb.MongoClientURI
+import com.mongodb.client.MongoDatabase
+import org.hyrical.store.connection.DatabaseConnection
+import org.hyrical.store.connection.mongo.details.AbstractMongoDetail
+
+class MongoConnection(val details: AbstractMongoDetail) : DatabaseConnection<MongoClient, MongoDatabase> {
 
     lateinit var handle: MongoClient
 
@@ -19,11 +25,7 @@ class MongoCollection(val details: AbstractMongoDetail) : DatabaseConnection<Mon
         handle = connection
     }
 
-    override fun close() {
-        handle.close()
-    }
-
-    override fun getAppliedResource(): MongoDatabase {
+    fun getAppliedResource(): MongoDatabase {
         return try {
             getConnection().getDatabase(details.database)
         } catch (ignored: Exception) {
@@ -43,7 +45,7 @@ class MongoCollection(val details: AbstractMongoDetail) : DatabaseConnection<Mon
 
     override fun createNewConnection(): MongoClient {
         return MongoClient(
-            MongoClientURI(details.uri)
+            MongoClientURI(details.getURI())
         )
     }
 }

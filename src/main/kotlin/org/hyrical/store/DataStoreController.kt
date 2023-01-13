@@ -2,7 +2,7 @@ package org.hyrical.store
 
 import org.hyrical.store.caching.CachingStrategy
 import org.hyrical.store.caching.ICachingStrategy
-import org.hyrical.store.constants.DataTypeResources
+import org.hyrical.store.connection.DatabaseConnection
 import org.hyrical.store.repository.AsyncRepository
 import org.hyrical.store.repository.Repository
 import org.hyrical.store.type.StorageType
@@ -19,7 +19,7 @@ import java.util.UUID
  * @author Nopox
  * @since 11/10/22
  */
-class DataStoreController<T : Storable>(private val type: StorageType, val classType: Class<T>, val connection: DatabaseConnection) {
+class DataStoreController<T : Storable>(private val type: StorageType, val classType: Class<T>, val connection: DatabaseConnection<*, *>?) {
 
     companion object {
 
@@ -32,7 +32,7 @@ class DataStoreController<T : Storable>(private val type: StorageType, val class
          *
          * @see [DataStoreController]
          */
-        inline fun <reified T : Storable> of(type: StorageType, connection: DatabaseConnection? = null, cachingStrategy: CachingStrategy = CachingStrategy.NONE): DataStoreController<T> {
+        inline fun <reified T : Storable> of(type: StorageType, connection: DatabaseConnection<*, *>? = null, cachingStrategy: CachingStrategy = CachingStrategy.NONE): DataStoreController<T> {
             return DataStoreController(type, T::class.java, connection).apply {
                 enableCachingStrategy(cachingStrategy)
             }
@@ -40,7 +40,7 @@ class DataStoreController<T : Storable>(private val type: StorageType, val class
 
         @JvmStatic
         fun <T : Storable> of(type: StorageType, t: Class<T>, cachingStrategy: CachingStrategy = CachingStrategy.NONE): DataStoreController<T> {
-            return DataStoreController<T>(type, t).apply {
+            return DataStoreController<T>(type, t, null).apply {
                 enableCachingStrategy(cachingStrategy)
             }
         }
