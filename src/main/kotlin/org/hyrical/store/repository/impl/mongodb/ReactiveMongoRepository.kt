@@ -1,30 +1,28 @@
 package org.hyrical.store.repository.impl.mongodb
 
 import com.mongodb.client.MongoCollection
+import com.mongodb.client.MongoDatabase
 import com.mongodb.client.model.Filters
 import com.mongodb.client.model.UpdateOptions
 import org.bson.Document
 import org.hyrical.store.DataStoreController
 import org.hyrical.store.Storable
-import org.hyrical.store.constants.DataTypeResources
+import org.hyrical.store.connection.mongo.MongoConnection
 import org.hyrical.store.repository.ReactiveRepository
 import org.hyrical.store.serializers.Serializers
 import reactor.core.publisher.Flux
 import reactor.core.publisher.Mono
+import java.lang.UnsupportedOperationException
 
-class ReactiveMongoRepository<T: Storable>(private val controller: DataStoreController<T>) : ReactiveRepository<T> {
+class ReactiveMongoRepository<T: Storable>(private val controller: DataStoreController<T>, val connection: MongoConnection) : ReactiveRepository<T> {
 
     private val id = controller.classType.simpleName
 
     private val serializer = Serializers.activeSerialize
 
-    var collection: MongoCollection<Document> = if (DataTypeResources.mongoCollections.containsKey(id)) {
-        DataTypeResources.mongoCollections[id]!!
-    } else {
-        val collection = DataTypeResources.mongoDatabase!!.getCollection(id)
-        DataTypeResources.mongoCollections[id] = collection
-        collection
-    }
+    val collection: MongoCollection<Document> = connection.useResourceWithReturn {
+        this.getCollection(controller.classType.simpleName)
+    } ?: throw UnsupportedOperationException("You did not provide a mongodatabase connection when initiating the owning DataStoreContrller.")
 
     /**
      * @param id The ID of the [T] object that you are searching for.

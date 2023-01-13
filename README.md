@@ -83,6 +83,7 @@
 * Twitter: [@RealRepation](https://twitter.com/RealRepation)
 * Github: [@Nopock](https://github.com/Nopock)
 
+
 ## 🤝 Contributing
 
 Contributions, issues and feature requests are welcome!<br />Feel free to check [issues page](https://github.com/Nopock/Store/issues). 
@@ -97,3 +98,5 @@ Copyright © 2022 [Nathan Weisz](https://github.com/Nopock).<br />
 This project is [MIT](https://github.com/Nopock/Store/blob/main/LICENSE) licensed.
 
 ***
+
+Database connection system skidded from Growly <3

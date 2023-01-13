@@ -1,29 +1,26 @@
 package org.hyrical.store.repository.impl.mongodb
 
 import com.mongodb.client.MongoCollection
+import com.mongodb.client.MongoDatabase
 import com.mongodb.client.model.Filters
 import com.mongodb.client.model.UpdateOptions
 import org.bson.Document
 import org.hyrical.store.DataStoreController
 import org.hyrical.store.Storable
-import org.hyrical.store.constants.DataTypeResources
+import org.hyrical.store.connection.mongo.MongoConnection
 import org.hyrical.store.repository.Repository
 import org.hyrical.store.serializers.Serializers
+import java.lang.UnsupportedOperationException
 import java.util.logging.Logger
 
-class MongoRepository<T : Storable>(private val controller: DataStoreController<T>) : Repository<T> {
-
-    private val id = controller.classType.simpleName
+class MongoRepository<T : Storable>(private val controller: DataStoreController<T>, val connection: MongoConnection) : Repository<T> {
 
     private val serializer = Serializers.activeSerialize
 
-    var collection: MongoCollection<Document> = if (DataTypeResources.mongoCollections.containsKey(id)) {
-        DataTypeResources.mongoCollections[id]!!
-    } else {
-        val collection = DataTypeResources.mongoDatabase!!.getCollection(id)
-        DataTypeResources.mongoCollections[id] = collection
-        collection
-    }
+
+    val collection: MongoCollection<Document> = connection.useResourceWithReturn {
+        this.getCollection(controller.classType.simpleName)
+    } ?: throw UnsupportedOperationException("You did not provide a mongodatabase connection when initiating the owning DataStoreContrller.")
 
     /**
      * @param [id] The ID of the [T] object that you are searching for.

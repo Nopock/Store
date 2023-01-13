@@ -2,7 +2,7 @@ package org.hyrical.store
 
 import org.hyrical.store.caching.CachingStrategy
 import org.hyrical.store.caching.ICachingStrategy
-import org.hyrical.store.constants.DataTypeResources
+import org.hyrical.store.connection.DatabaseConnection
 import org.hyrical.store.repository.AsyncRepository
 import org.hyrical.store.repository.Repository
 import org.hyrical.store.type.StorageType
@@ -19,7 +19,7 @@ import java.util.UUID
  * @author Nopox
  * @since 11/10/22
  */
-class DataStoreController<T : Storable>(private val type: StorageType, val classType: Class<T>) {
+class DataStoreController<T : Storable>(private val type: StorageType, val classType: Class<T>, val connection: DatabaseConnection<*, *>?) {
 
     companion object {
 
@@ -32,15 +32,15 @@ class DataStoreController<T : Storable>(private val type: StorageType, val class
          *
          * @see [DataStoreController]
          */
-        inline fun <reified T : Storable> of(type: StorageType, cachingStrategy: CachingStrategy = CachingStrategy.NONE): DataStoreController<T> {
-            return DataStoreController(type, T::class.java).apply {
+        inline fun <reified T : Storable> of(type: StorageType, connection: DatabaseConnection<*, *>? = null, cachingStrategy: CachingStrategy = CachingStrategy.NONE): DataStoreController<T> {
+            return DataStoreController(type, T::class.java, connection).apply {
                 enableCachingStrategy(cachingStrategy)
             }
         }
 
         @JvmStatic
-        fun <T : Storable> of(type: StorageType, t: Class<T>, cachingStrategy: CachingStrategy = CachingStrategy.NONE): DataStoreController<T> {
-            return DataStoreController<T>(type, t).apply {
+        fun <T : Storable> of(type: StorageType, t: Class<T>, connection: DatabaseConnection<*, *>? = null, cachingStrategy: CachingStrategy = CachingStrategy.NONE): DataStoreController<T> {
+            return DataStoreController<T>(type, t, connection).apply {
                 enableCachingStrategy(cachingStrategy)
             }
         }
@@ -48,11 +48,11 @@ class DataStoreController<T : Storable>(private val type: StorageType, val class
 
     // We do this lazy cause maybe they don't use a repo only async or reactive
     val repository: Repository<T> by lazy {
-        type.build(this)
+        type.build(this, connection)
     }
 
     val asyncRepository: AsyncRepository<T> by lazy {
-        type.buildAsync(this)
+        type.buildAsync(this, connection)
     }
 
     private var cachingStrategy: CachingStrategy = CachingStrategy.NONE
