@@ -73,6 +73,7 @@
 - Better MongoDB and redis connections
 - Implement a cache for dif types
 - Add support for kotlinx.coroutines
+- Wrapper for return types
 
 ![Alt](https://repobeats.axiom.co/api/embed/d9732890507abe6f645b1c954e032aea40b39386.svg "Repobeats analytics image")
 
