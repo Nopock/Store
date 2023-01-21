@@ -5,6 +5,8 @@ import org.hyrical.store.Storable
 import org.hyrical.store.repository.Repository
 import org.hyrical.store.serializers.Serializers
 import java.io.File
+import java.io.FileReader
+import java.util.ArrayList
 
 class FlatFileRepository<T : Storable>(controller: DataStoreController<T>) : Repository<T> {
 
@@ -15,8 +17,10 @@ class FlatFileRepository<T : Storable>(controller: DataStoreController<T>) : Rep
     val cache: MutableList<T> = mutableListOf()
 
     init {
-        for (line in file.readLines()) {
-            cache.add(Serializers.activeSerialize.deserialize(line, controller.classType)!!)
+        FileReader(file).use {
+            val jsonString = it.readText()
+            val jsonArray = Serializers.activeSerialize.deserialize(jsonString, ArrayList<T>().javaClass)
+            cache.addAll(jsonArray!!)
         }
     }
 
