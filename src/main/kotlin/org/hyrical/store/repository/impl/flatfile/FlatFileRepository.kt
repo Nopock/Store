@@ -14,6 +14,12 @@ class FlatFileRepository<T : Storable>(controller: DataStoreController<T>) : Rep
 
     val cache: MutableList<T> = mutableListOf()
 
+    init {
+        for (line in file.readLines()) {
+            cache.add(Serializers.activeSerialize.deserialize(line, controller.classType)!!)
+        }
+    }
+
     /**
      * @param [id] The ID of the [T] object that you are searching for.
      *
