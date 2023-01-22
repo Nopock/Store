@@ -15,11 +15,6 @@ import reactor.core.publisher.Mono
 import java.lang.UnsupportedOperationException
 
 class ReactiveMongoRepository<T: Storable>(private val controller: DataStoreController<T>, val connection: MongoConnection) : ReactiveRepository<T> {
-
-    private val id = controller.classType.simpleName
-
-    private val serializer = Serializers.activeSerialize
-
     val collection: MongoCollection<Document> = connection.useResourceWithReturn {
         this.getCollection(controller.classType.simpleName)
     } ?: throw UnsupportedOperationException("You did not provide a mongodatabase connection when initiating the owning DataStoreContrller.")
@@ -31,7 +26,7 @@ class ReactiveMongoRepository<T: Storable>(private val controller: DataStoreCont
      */
     override fun search(id: String): Mono<T> {
         return Mono.justOrEmpty(
-            serializer.deserialize(collection.find(Filters.eq("_id", id)).first()?.toJson(), controller.classType)
+            Serializers.activeSerialize.deserialize(collection.find(Filters.eq("_id", id)).first()?.toJson(), controller.classType)
         )
     }
 
@@ -62,7 +57,7 @@ class ReactiveMongoRepository<T: Storable>(private val controller: DataStoreCont
      */
     override fun findAll(): Flux<T> {
         return Flux.fromIterable(
-            collection.find().map { serializer.deserialize(it.toJson(), controller.classType)!! }
+            collection.find().map { Serializers.activeSerialize.deserialize(it.toJson(), controller.classType)!! }
         )
     }
 
@@ -86,7 +81,7 @@ class ReactiveMongoRepository<T: Storable>(private val controller: DataStoreCont
             t.also {
                 collection.updateOne(
                     Filters.eq("_id", t.identifier),
-                    Document("\$set", Document.parse(serializer.serialize(t))),
+                    Document("\$set", Document.parse(Serializers.activeSerialize.serialize(t))),
                     UpdateOptions().upsert(true)
                 )
             }

@@ -14,10 +14,6 @@ import java.util.concurrent.CompletableFuture
 
 class AsyncMongoRepository<T : Storable>(private val controller: DataStoreController<T>, val connection: MongoConnection) : AsyncRepository<T> {
 
-    private val id = controller.classType.simpleName
-
-    private val serializer = Serializers.activeSerialize
-
     val collection: MongoCollection<Document> = connection.useResourceWithReturn {
         this.getCollection(controller.classType.simpleName)
     } ?: throw UnsupportedOperationException("You did not provide a mongodatabase connection when initiating the owning DataStoreContrller.")
@@ -29,7 +25,7 @@ class AsyncMongoRepository<T : Storable>(private val controller: DataStoreContro
      */
     override fun search(id: String): CompletableFuture<T?> {
         return CompletableFuture.supplyAsync {
-            return@supplyAsync serializer.deserialize(collection.find(Filters.eq("_id", id)).first()?.toJson() ?: return@supplyAsync null, controller.classType)
+            return@supplyAsync Serializers.activeSerialize.deserialize(collection.find(Filters.eq("_id", id)).first()?.toJson() ?: return@supplyAsync null, controller.classType)
         }
     }
 
@@ -56,7 +52,7 @@ class AsyncMongoRepository<T : Storable>(private val controller: DataStoreContro
      */
     override fun findAll(): CompletableFuture<List<T>> {
         return CompletableFuture.supplyAsync {
-            return@supplyAsync collection.find().map { serializer.deserialize(it.toJson(), controller.classType)!! }.toList()
+            return@supplyAsync collection.find().map { Serializers.activeSerialize.deserialize(it.toJson(), controller.classType)!! }.toList()
         }
     }
 
@@ -82,7 +78,7 @@ class AsyncMongoRepository<T : Storable>(private val controller: DataStoreContro
      */
     override fun save(t: T): CompletableFuture<T> {
         return CompletableFuture.supplyAsync {
-            collection.updateOne(Filters.eq("_id", t.identifier), Document("\$set",  Document.parse(serializer.serialize(t))))
+            collection.updateOne(Filters.eq("_id", t.identifier), Document("\$set",  Document.parse(Serializers.activeSerialize.serialize(t))))
 
             return@supplyAsync t
         }

@@ -15,9 +15,6 @@ import java.util.logging.Logger
 
 class MongoRepository<T : Storable>(private val controller: DataStoreController<T>, val connection: MongoConnection) : Repository<T> {
 
-    private val serializer = Serializers.activeSerialize
-
-
     val collection: MongoCollection<Document> = connection.useResourceWithReturn {
         this.getCollection(controller.classType.simpleName)
     } ?: throw UnsupportedOperationException("You did not provide a mongodatabase connection when initiating the owning DataStoreContrller.")
@@ -28,7 +25,7 @@ class MongoRepository<T : Storable>(private val controller: DataStoreController<
      * @return [T?] The [T] object if found else null.
      */
     override fun search(id: String): T? {
-        return serializer.deserialize(collection.find(Filters.eq("_id", id)).first()?.toJson(), controller.classType)
+        return Serializers.activeSerialize.deserialize(collection.find(Filters.eq("_id", id)).first()?.toJson(), controller.classType)
     }
 
     /**
@@ -49,7 +46,7 @@ class MongoRepository<T : Storable>(private val controller: DataStoreController<
      * @return [List<T>] A list of all the objects in the repository.
      */
     override fun findAll(): List<T> {
-        return collection.find().map { serializer.deserialize(it.toJson(), controller.classType)!! }.toList()
+        return collection.find().map { Serializers.activeSerialize.deserialize(it.toJson(), controller.classType)!! }.toList()
     }
 
     /**
@@ -68,7 +65,7 @@ class MongoRepository<T : Storable>(private val controller: DataStoreController<
      * @return [T] The object saved.
      */
     override fun save(t: T): T {
-        collection.updateOne(Filters.eq("_id", t.identifier), Document("\$set",  Document.parse(serializer.serialize(t))), UpdateOptions().upsert(true))
+        collection.updateOne(Filters.eq("_id", t.identifier), Document("\$set",  Document.parse(Serializers.activeSerialize.serialize(t))), UpdateOptions().upsert(true))
         return t
     }
 }
