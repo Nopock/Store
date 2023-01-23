@@ -6,7 +6,7 @@ import com.mongodb.client.MongoDatabase
 import org.hyrical.store.connection.DatabaseConnection
 import org.hyrical.store.connection.mongo.details.AbstractMongoDetail
 
-class MongoConnection(val details: AbstractMongoDetail) : DatabaseConnection<MongoClient, MongoDatabase> {
+class MongoConnection(val details: AbstractMongoDetail, val database: String) : DatabaseConnection<MongoClient, MongoDatabase> {
 
     lateinit var handle: MongoClient
 
@@ -27,11 +27,11 @@ class MongoConnection(val details: AbstractMongoDetail) : DatabaseConnection<Mon
 
     fun getAppliedResource(): MongoDatabase {
         return try {
-            getConnection().getDatabase(details.database)
+            getConnection().getDatabase(database)
         } catch (ignored: Exception) {
             setConnection(createNewConnection())
 
-            getConnection().getDatabase(details.database)
+            getConnection().getDatabase(database)
         }
     }
 
