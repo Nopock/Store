@@ -11,8 +11,9 @@
   <a href="https://github.com/Nopock/Store/blob/main/LICENSE" target="_blank">
     <img alt="License: MIT" src="https://img.shields.io/github/license/Nopock/Store" />
   </a>
-  [![Release](https://jitpack.io/v/Nopock/Store.svg)]
-  (https://jitpack.io/#Nopock/Store)
+  <a href="https://jitpack.io/#Nopock/Store" target="_blank">
+    <img alt="Release" src="https://jitpack.io/v/Nopock/Store.svg" />
+  </a>
   
   [![Java CI](https://github.com/Nopock/Store/actions/workflows/gradle.yml/badge.svg)](https://github.com/Nopock/Store/actions/workflows/gradle.yml)
 </p>
