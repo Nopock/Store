@@ -80,6 +80,7 @@
 - Add support for FileConnection
 - Code cleanups
 - More CI/CD
+- Write tests that get ran on commit so that I don't break shit
 
 ![Alt](https://repobeats.axiom.co/api/embed/d9732890507abe6f645b1c954e032aea40b39386.svg "Repobeats analytics image")
 
