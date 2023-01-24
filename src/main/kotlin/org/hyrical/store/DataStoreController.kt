@@ -64,6 +64,8 @@ class DataStoreController<T : Storable>(private val type: StorageType, val class
     fun bindFlatFileDirectory(directory: String)  {
         if (type == StorageType.FLAT_FILE) {
             this.directory = directory
+        } else {
+            throw UnsupportOperationException("You attempted to bind a flat file directory to a non flat file DataStoreController!!")
         }
     }
 }

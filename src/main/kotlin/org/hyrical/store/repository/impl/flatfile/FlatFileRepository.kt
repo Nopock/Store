@@ -10,19 +10,17 @@ import java.util.ArrayList
 class FlatFileRepository<T : Storable>(controller: DataStoreController<T>) : Repository<T> {
 
     val file: File = File(controller.directory, controller.classType.simpleName + ".json").also {
-        if (!it.exists()) it.createNewFile()
+        if (!it.exists()) it.mkdir()
     }
 
     val cache = mutableMapOf<String, T>()
 
     init {
         // Read the file and deserialize the contents into the cache map
-        val file = File(controller.directory, controller.classType.simpleName + ".json")
-        if (file.exists()) {
-            val jsonString = file.readText()
-            val objects = Serializers.activeSerializer.deserialize(jsonString, ArrayList<T>().javaClass)
-            objects?.forEach { obj -> cache[obj.identifier] = obj }
-        }
+        val jsonString = file.readText()
+        val type = TypeToken<T>() {}.getType()
+        val objects = Serializers.activeSerializer.deserialize(jsonString, type)
+        objects?.forEach { obj -> cache[obj.identifier] = obj }   
     }
 
     override fun search(id: String): T? {
