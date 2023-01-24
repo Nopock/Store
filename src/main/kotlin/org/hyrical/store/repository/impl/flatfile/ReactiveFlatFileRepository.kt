@@ -11,19 +11,19 @@ import java.io.FileReader
 import java.util.ArrayList
 
 class ReactiveFlatFileRepository<T: Storable>(controller: DataStoreController<T>) : ReactiveRepository<T> {
-
+    
     val file: File = File(controller.directory, controller.classType.simpleName + ".json").also {
-        if (!it.exists()) it.createNewFile()
+        if (!it.exists()) it.mkdir()
     }
 
-    val cache: MutableList<T> = mutableListOf()
-
+    val cache = mutableMapOf<String, T>()
+    
     init {
-        FileReader(file).use {
-            val jsonString = it.readText()
-            val jsonArray = Serializers.activeSerializer.deserialize<ArrayList<T>>(jsonString, ArrayList<T>().javaClass)
-            cache.addAll(jsonArray!!)
-        }
+        // Read the file and deserialize the contents into the cache map
+        val jsonString = file.readText()
+        val type = TypeToken.getParameterized(ArrayList::class.java, controller.classType).type
+        val objects = Serializers.activeSerializer.deserialize<ArrayList<T>>(jsonString, type)
+        objects?.forEach { obj -> cache[obj.identifier] = obj }   
     }
 
     /**
@@ -33,7 +33,7 @@ class ReactiveFlatFileRepository<T: Storable>(controller: DataStoreController<T>
      */
     override fun search(id: String): Mono<T> {
         return Mono.justOrEmpty(
-            cache.firstOrNull { it.identifier == id }
+            cache[id]
         )
     }
 
@@ -43,9 +43,9 @@ class ReactiveFlatFileRepository<T: Storable>(controller: DataStoreController<T>
      * @return [Mono<Void>] Mono.empty() if the deletion is successful.
      */
     override fun delete(id: String): Mono<Void> {
-        return Mono.fromRunnable {
-            cache.removeIf { it.identifier == id }
-            file.writeText(Serializers.activeSerializer.serialize(cache)!!)
+        return Mono.fromRunnable {       
+            cache.remove(id)
+            persistToFile()
         }
     }
 
@@ -56,8 +56,8 @@ class ReactiveFlatFileRepository<T: Storable>(controller: DataStoreController<T>
      */
     override fun deleteMany(vararg keys: String): Mono<Void> {
         return Mono.fromRunnable {
-            cache.removeIf { keys.contains(it.identifier) }
-            file.writeText(Serializers.activeSerializer.serialize(cache)!!)
+            keys.forEach { key -> cache.remove(key) }
+            persistToFile()
         }
     }
 
@@ -66,7 +66,7 @@ class ReactiveFlatFileRepository<T: Storable>(controller: DataStoreController<T>
      */
     override fun findAll(): Flux<T> {
         return Flux.fromIterable(
-            cache
+            cache.values.toList()
         )
     }
 
@@ -77,8 +77,9 @@ class ReactiveFlatFileRepository<T: Storable>(controller: DataStoreController<T>
      */
     override fun saveMany(vararg objects: T): Flux<T> {
         return Flux.fromArray(objects).also {
-            cache.addAll(objects)
-            file.writeText(Serializers.activeSerializer.serialize(cache)!!)
+            objects.forEach { obj -> cache[obj.identifier] = obj }
+            persistToFile()
+            objects.toList()
         }
 
     }
@@ -91,9 +92,15 @@ class ReactiveFlatFileRepository<T: Storable>(controller: DataStoreController<T>
     override fun save(t: T): Mono<T> {
         return Mono.just(
             t.also {
-                cache.add(t)
-                file.writeText(Serializers.activeSerializer.serialize(cache)!!)
+                cache[t.identifier] = t
+                persistToFile()
             }
         )
+    }
+
+    private fun persistToFile() {
+        // Serialize the cache map and write it to the file
+        val jsonString = Serializers.activeSerializer.serialize(cache.values)
+        file.writeText(jsonString!!)
     }
 }

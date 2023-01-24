@@ -8,21 +8,22 @@ import java.io.File
 import java.io.FileReader
 import java.util.ArrayList
 import java.util.concurrent.CompletableFuture
+import com.google.gson.reflect.TypeToken
 
 class AsyncFlatFileRepository<T : Storable>(controller: DataStoreController<T>) : AsyncRepository<T> {
 
     val file: File = File(controller.directory, controller.classType.simpleName + ".json").also {
-        if (!it.exists()) it.createNewFile()
+        if (!it.exists()) it.mkdir()
     }
 
-    val cache: MutableList<T> = mutableListOf()
-
+    val cache = mutableMapOf<String, T>()
+    
     init {
-        FileReader(file).use {
-            val jsonString = it.readText()
-            val jsonArray = Serializers.activeSerializer.deserialize<ArrayList<T>>(jsonString, ArrayList<T>().javaClass)
-            cache.addAll(jsonArray!!)
-        }
+        // Read the file and deserialize the contents into the cache map
+        val jsonString = file.readText()
+        val type = TypeToken.getParameterized(ArrayList::class.java, controller.classType).type
+        val objects = Serializers.activeSerializer.deserialize<ArrayList<T>>(jsonString, type)
+        objects?.forEach { obj -> cache[obj.identifier] = obj }   
     }
 
     /**
@@ -32,7 +33,7 @@ class AsyncFlatFileRepository<T : Storable>(controller: DataStoreController<T>) 
      */
     override fun search(id: String): CompletableFuture<T?> {
         return CompletableFuture.supplyAsync {
-            cache.firstOrNull { it.identifier == id }
+            cache[id]
         }
     }
 
@@ -40,16 +41,20 @@ class AsyncFlatFileRepository<T : Storable>(controller: DataStoreController<T>) 
      * @param id The ID of the [T] object to delete.
      */
     override fun delete(id: String) {
-        cache.removeIf { it.identifier == id }
-        file.writeText(Serializers.activeSerializer.serialize(cache)!!)
+        CompletableFuture.runAsync {
+            cache.remove(id)
+            persistToFile()
+        }
     }
 
     /**
      * @param keys A vararg of keys/ids that will be deleted.
      */
     override fun deleteMany(vararg keys: String) {
-        cache.removeIf { keys.contains(it.identifier) }
-        file.writeText(Serializers.activeSerializer.serialize(cache)!!)
+        CompletableFuture.runAsync {
+            keys.forEach { key -> cache.remove(key) }
+            persistToFile()
+        }
     }
 
     /**
@@ -57,7 +62,7 @@ class AsyncFlatFileRepository<T : Storable>(controller: DataStoreController<T>) 
      */
     override fun findAll(): CompletableFuture<List<T>> {
         return CompletableFuture.supplyAsync {
-            cache
+            cache.values.toList()
         }
     }
 
@@ -68,9 +73,9 @@ class AsyncFlatFileRepository<T : Storable>(controller: DataStoreController<T>) 
      */
     override fun saveMany(vararg objects: T): CompletableFuture<List<T>> {
         return CompletableFuture.supplyAsync {
-            cache.addAll(objects)
-            file.writeText(Serializers.activeSerializer.serialize(cache)!!)
-            cache
+            objects.forEach { obj -> cache[obj.identifier] = obj }
+            persistToFile()
+            objects.toList()
         }
     }
 
@@ -81,9 +86,15 @@ class AsyncFlatFileRepository<T : Storable>(controller: DataStoreController<T>) 
      */
     override fun save(t: T): CompletableFuture<T> {
         return CompletableFuture.supplyAsync {
-            cache.add(t)
-            file.writeText(Serializers.activeSerializer.serialize(cache)!!)
+            cache[t.identifier] = t
+            persistToFile()
             t
         }
+    }
+
+    private fun persistToFile() {
+        // Serialize the cache map and write it to the file
+        val jsonString = Serializers.activeSerializer.serialize(cache.values)
+        file.writeText(jsonString!!)
     }
 }
