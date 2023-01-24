@@ -2,7 +2,7 @@
 <p>
   <img alt="Version" src="https://img.shields.io/badge/version-1.0.0-blue.svg?cacheSeconds=2592000" />
   <img src="https://img.shields.io/badge/kotlin-1.7.21-blue.svg" />
-  <a href="https://github.com/Nopock/Store#Usage" target="_blank">
+  <a href="https://nopox.gitbook.io/libraries/products/store" target="_blank">
     <img alt="Documentation" src="https://img.shields.io/badge/documented-yes-brightgreen.svg" />
   </a>
   <a href="https://github.com/Nopock/Store/graphs/commit-activity" target="_blank">
@@ -11,6 +11,8 @@
   <a href="https://github.com/Nopock/Store/blob/main/LICENSE" target="_blank">
     <img alt="License: MIT" src="https://img.shields.io/github/license/Nopock/Store" />
   </a>
+  [![Release](https://jitpack.io/v/Nopock/Store.svg)]
+  (https://jitpack.io/#Nopock/Store)
   
   [![Java CI](https://github.com/Nopock/Store/actions/workflows/gradle.yml/badge.svg)](https://github.com/Nopock/Store/actions/workflows/gradle.yml)
 </p>

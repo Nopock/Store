@@ -7,6 +7,7 @@ import org.hyrical.store.repository.Repository
 import org.hyrical.store.type.StorageType
 import java.lang.reflect.ParameterizedType
 import java.util.UUID
+import java.lang.UnsupportOperationException
 
 /**
  * The object that handles creating new [Repository]'s and
