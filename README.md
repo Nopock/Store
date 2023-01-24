@@ -14,8 +14,9 @@
   <a href="https://jitpack.io/#Nopock/Store" target="_blank">
     <img alt="Release" src="https://jitpack.io/v/Nopock/Store.svg" />
   </a>
-  
-  [![Java CI](https://github.com/Nopock/Store/actions/workflows/gradle.yml/badge.svg)](https://github.com/Nopock/Store/actions/workflows/gradle.yml)
+  <a href="https://github.com/Nopock/Store/actions/workflows/gradle.yml" target="_blank">
+    <img alt="Java CI" src="https://github.com/Nopock/Store/actions/workflows/gradle.yml/badge.svg" />
+  </a>
 </p>
 
 > An AIO data storage library.
