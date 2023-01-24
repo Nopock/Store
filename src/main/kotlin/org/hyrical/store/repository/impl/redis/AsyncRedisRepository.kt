@@ -5,13 +5,11 @@ import org.hyrical.store.Storable
 import org.hyrical.store.connection.redis.RedisConnection
 import org.hyrical.store.repository.AsyncRepository
 import org.hyrical.store.serializers.Serializers
-import redis.clients.jedis.Jedis
-import java.lang.UnsupportedOperationException
 import java.util.concurrent.CompletableFuture
 
 class AsyncRedisRepository<T : Storable>(private val controller: DataStoreController<T>, val connection: RedisConnection) : AsyncRepository<T> {
 
-    private val serializer = Serializers.activeSerialize
+    private val serializer = Serializers.activeSerializer
 
     private val id = controller.classType.simpleName
 

@@ -1,7 +1,6 @@
 package org.hyrical.store.repository.impl.mongodb
 
 import com.mongodb.client.MongoCollection
-import com.mongodb.client.MongoDatabase
 import com.mongodb.client.model.Filters
 import com.mongodb.client.model.UpdateOptions
 import org.bson.Document
@@ -26,7 +25,7 @@ class ReactiveMongoRepository<T: Storable>(private val controller: DataStoreCont
      */
     override fun search(id: String): Mono<T> {
         return Mono.justOrEmpty(
-            Serializers.activeSerialize.deserialize(collection.find(Filters.eq("_id", id)).first()?.toJson(), controller.classType)
+            Serializers.activeSerializer.deserialize(collection.find(Filters.eq("_id", id)).first()?.toJson(), controller.classType)
         )
     }
 
@@ -57,7 +56,7 @@ class ReactiveMongoRepository<T: Storable>(private val controller: DataStoreCont
      */
     override fun findAll(): Flux<T> {
         return Flux.fromIterable(
-            collection.find().map { Serializers.activeSerialize.deserialize(it.toJson(), controller.classType)!! }
+            collection.find().map { Serializers.activeSerializer.deserialize(it.toJson(), controller.classType)!! }
         )
     }
 
@@ -81,7 +80,7 @@ class ReactiveMongoRepository<T: Storable>(private val controller: DataStoreCont
             t.also {
                 collection.updateOne(
                     Filters.eq("_id", t.identifier),
-                    Document("\$set", Document.parse(Serializers.activeSerialize.serialize(t))),
+                    Document("\$set", Document.parse(Serializers.activeSerializer.serialize(t))),
                     UpdateOptions().upsert(true)
                 )
             }

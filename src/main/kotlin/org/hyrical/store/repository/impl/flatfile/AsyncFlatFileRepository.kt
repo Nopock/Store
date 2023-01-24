@@ -20,7 +20,7 @@ class AsyncFlatFileRepository<T : Storable>(controller: DataStoreController<T>) 
     init {
         FileReader(file).use {
             val jsonString = it.readText()
-            val jsonArray = Serializers.activeSerialize.deserialize<ArrayList<T>>(jsonString, ArrayList<T>().javaClass)
+            val jsonArray = Serializers.activeSerializer.deserialize<ArrayList<T>>(jsonString, ArrayList<T>().javaClass)
             cache.addAll(jsonArray!!)
         }
     }
@@ -41,7 +41,7 @@ class AsyncFlatFileRepository<T : Storable>(controller: DataStoreController<T>) 
      */
     override fun delete(id: String) {
         cache.removeIf { it.identifier == id }
-        file.writeText(Serializers.activeSerialize.serialize(cache)!!)
+        file.writeText(Serializers.activeSerializer.serialize(cache)!!)
     }
 
     /**
@@ -49,7 +49,7 @@ class AsyncFlatFileRepository<T : Storable>(controller: DataStoreController<T>) 
      */
     override fun deleteMany(vararg keys: String) {
         cache.removeIf { keys.contains(it.identifier) }
-        file.writeText(Serializers.activeSerialize.serialize(cache)!!)
+        file.writeText(Serializers.activeSerializer.serialize(cache)!!)
     }
 
     /**
@@ -69,7 +69,7 @@ class AsyncFlatFileRepository<T : Storable>(controller: DataStoreController<T>) 
     override fun saveMany(vararg objects: T): CompletableFuture<List<T>> {
         return CompletableFuture.supplyAsync {
             cache.addAll(objects)
-            file.writeText(Serializers.activeSerialize.serialize(cache)!!)
+            file.writeText(Serializers.activeSerializer.serialize(cache)!!)
             cache
         }
     }
@@ -82,7 +82,7 @@ class AsyncFlatFileRepository<T : Storable>(controller: DataStoreController<T>) 
     override fun save(t: T): CompletableFuture<T> {
         return CompletableFuture.supplyAsync {
             cache.add(t)
-            file.writeText(Serializers.activeSerialize.serialize(cache)!!)
+            file.writeText(Serializers.activeSerializer.serialize(cache)!!)
             t
         }
     }

@@ -1,7 +1,6 @@
 package org.hyrical.store.repository.impl.mongodb
 
 import com.mongodb.client.MongoCollection
-import com.mongodb.client.MongoDatabase
 import com.mongodb.client.model.Filters
 import org.bson.Document
 import org.hyrical.store.DataStoreController
@@ -25,7 +24,7 @@ class AsyncMongoRepository<T : Storable>(private val controller: DataStoreContro
      */
     override fun search(id: String): CompletableFuture<T?> {
         return CompletableFuture.supplyAsync {
-            return@supplyAsync Serializers.activeSerialize.deserialize(collection.find(Filters.eq("_id", id)).first()?.toJson() ?: return@supplyAsync null, controller.classType)
+            return@supplyAsync Serializers.activeSerializer.deserialize(collection.find(Filters.eq("_id", id)).first()?.toJson() ?: return@supplyAsync null, controller.classType)
         }
     }
 
@@ -52,7 +51,7 @@ class AsyncMongoRepository<T : Storable>(private val controller: DataStoreContro
      */
     override fun findAll(): CompletableFuture<List<T>> {
         return CompletableFuture.supplyAsync {
-            return@supplyAsync collection.find().map { Serializers.activeSerialize.deserialize(it.toJson(), controller.classType)!! }.toList()
+            return@supplyAsync collection.find().map { Serializers.activeSerializer.deserialize(it.toJson(), controller.classType)!! }.toList()
         }
     }
 
@@ -78,7 +77,7 @@ class AsyncMongoRepository<T : Storable>(private val controller: DataStoreContro
      */
     override fun save(t: T): CompletableFuture<T> {
         return CompletableFuture.supplyAsync {
-            collection.updateOne(Filters.eq("_id", t.identifier), Document("\$set",  Document.parse(Serializers.activeSerialize.serialize(t))))
+            collection.updateOne(Filters.eq("_id", t.identifier), Document("\$set",  Document.parse(Serializers.activeSerializer.serialize(t))))
 
             return@supplyAsync t
         }

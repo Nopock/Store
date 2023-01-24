@@ -10,7 +10,7 @@ import org.hyrical.store.repository.ReactiveRepository
 
 class ReactiveRedisRepository<T: Storable>(private val controller: DataStoreController<T>, val connection: RedisConnection) : ReactiveRepository<T> {
 
-    private val serializer = Serializers.activeSerialize
+    private val serializer = Serializers.activeSerializer
 
     private val id = controller.classType.simpleName
 
@@ -22,7 +22,7 @@ class ReactiveRedisRepository<T: Storable>(private val controller: DataStoreCont
     override fun search(id: String): Mono<T> {
         return Mono.justOrEmpty(
             connection.useResourceWithReturn {
-                serializer.deserialize(hget(this@ReactiveRedisRepository.id, id), controller.classType) ?: null
+                serializer.deserialize(hget(this@ReactiveRedisRepository.id, id), controller.classType)
             }
         )
     }
@@ -60,7 +60,7 @@ class ReactiveRedisRepository<T: Storable>(private val controller: DataStoreCont
         return Flux.fromIterable(
             connection.useResourceWithReturn {
                 hgetAll(this@ReactiveRedisRepository.id).values.map { serializer.deserialize(it, controller.classType)!! }
-            }
+            }!!
         )
     }
 

@@ -5,12 +5,10 @@ import org.hyrical.store.Storable
 import org.hyrical.store.connection.redis.RedisConnection
 import org.hyrical.store.repository.Repository
 import org.hyrical.store.serializers.Serializers
-import redis.clients.jedis.Jedis
-import java.lang.UnsupportedOperationException
 
 class RedisRepository<T : Storable>(private val controller: DataStoreController<T>, val connection: RedisConnection) : Repository<T> {
 
-    private val serializer = Serializers.activeSerialize
+    private val serializer = Serializers.activeSerializer
 
     private val id = controller.classType.simpleName
 

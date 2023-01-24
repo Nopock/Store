@@ -10,7 +10,7 @@ import java.io.File
 import java.io.FileReader
 import java.util.ArrayList
 
-class ReactiveFlatFileRepository<T: Storable>(private val controller: DataStoreController<T>) : ReactiveRepository<T> {
+class ReactiveFlatFileRepository<T: Storable>(controller: DataStoreController<T>) : ReactiveRepository<T> {
 
     val file: File = File(controller.directory, controller.classType.simpleName + ".json").also {
         if (!it.exists()) it.createNewFile()
@@ -21,7 +21,7 @@ class ReactiveFlatFileRepository<T: Storable>(private val controller: DataStoreC
     init {
         FileReader(file).use {
             val jsonString = it.readText()
-            val jsonArray = Serializers.activeSerialize.deserialize<ArrayList<T>>(jsonString, ArrayList<T>().javaClass)
+            val jsonArray = Serializers.activeSerializer.deserialize<ArrayList<T>>(jsonString, ArrayList<T>().javaClass)
             cache.addAll(jsonArray!!)
         }
     }
@@ -45,7 +45,7 @@ class ReactiveFlatFileRepository<T: Storable>(private val controller: DataStoreC
     override fun delete(id: String): Mono<Void> {
         return Mono.fromRunnable {
             cache.removeIf { it.identifier == id }
-            file.writeText(Serializers.activeSerialize.serialize(cache)!!)
+            file.writeText(Serializers.activeSerializer.serialize(cache)!!)
         }
     }
 
@@ -57,7 +57,7 @@ class ReactiveFlatFileRepository<T: Storable>(private val controller: DataStoreC
     override fun deleteMany(vararg keys: String): Mono<Void> {
         return Mono.fromRunnable {
             cache.removeIf { keys.contains(it.identifier) }
-            file.writeText(Serializers.activeSerialize.serialize(cache)!!)
+            file.writeText(Serializers.activeSerializer.serialize(cache)!!)
         }
     }
 
@@ -78,7 +78,7 @@ class ReactiveFlatFileRepository<T: Storable>(private val controller: DataStoreC
     override fun saveMany(vararg objects: T): Flux<T> {
         return Flux.fromArray(objects).also {
             cache.addAll(objects)
-            file.writeText(Serializers.activeSerialize.serialize(cache)!!)
+            file.writeText(Serializers.activeSerializer.serialize(cache)!!)
         }
 
     }
@@ -92,7 +92,7 @@ class ReactiveFlatFileRepository<T: Storable>(private val controller: DataStoreC
         return Mono.just(
             t.also {
                 cache.add(t)
-                file.writeText(Serializers.activeSerialize.serialize(cache)!!)
+                file.writeText(Serializers.activeSerializer.serialize(cache)!!)
             }
         )
     }
