@@ -7,7 +7,6 @@ import org.hyrical.store.repository.Repository
 import org.hyrical.store.type.StorageType
 import java.lang.reflect.ParameterizedType
 import java.util.UUID
-import java.lang.UnsupportOperationException
 
 /**
  * The object that handles creating new [Repository]'s and
@@ -66,7 +65,7 @@ class DataStoreController<T : Storable>(private val type: StorageType, val class
         if (type == StorageType.FLAT_FILE) {
             this.directory = directory
         } else {
-            throw UnsupportOperationException("You attempted to bind a flat file directory to a non flat file DataStoreController!!")
+            throw UnsupportedOperationException("You attempted to bind a flat file directory to a non flat file DataStoreController!!")
         }
     }
 }

@@ -15,12 +15,12 @@ class FlatFileRepository<T : Storable>(controller: DataStoreController<T>) : Rep
     }
 
     val cache = mutableMapOf<String, T>()
-
+    
     init {
         // Read the file and deserialize the contents into the cache map
         val jsonString = file.readText()
-        val type = TypeToken<ArrayList<T>() {}.getType()
-        val objects = Serializers.activeSerializer.deserialize(jsonString, type)
+        val type = TypeToken.getParameterized(ArrayList::class.java, controller.classType).type
+        val objects = Serializers.activeSerializer.deserialize<ArrayList<T>>(jsonString, type)
         objects?.forEach { obj -> cache[obj.identifier] = obj }   
     }
 
