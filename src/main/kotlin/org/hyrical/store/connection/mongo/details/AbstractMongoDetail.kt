@@ -1,5 +1,5 @@
 package org.hyrical.store.connection.mongo.details
 
-abstract class AbstractMongoDetail(val database: String) {
+abstract class AbstractMongoDetail {
     abstract fun getURI(): String
 }
