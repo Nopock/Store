@@ -9,6 +9,7 @@ import reactor.core.publisher.Mono
 import java.io.File
 import java.io.FileReader
 import java.util.ArrayList
+import com.google.gson.reflect.TypeToken
 
 class ReactiveFlatFileRepository<T: Storable>(controller: DataStoreController<T>) : ReactiveRepository<T> {
     
