@@ -6,6 +6,7 @@ import org.hyrical.store.repository.Repository
 import org.hyrical.store.serializers.Serializers
 import java.io.File
 import java.util.ArrayList
+import com.google.gson.reflect.TypeToken
 
 class FlatFileRepository<T : Storable>(controller: DataStoreController<T>) : Repository<T> {
 
@@ -18,7 +19,7 @@ class FlatFileRepository<T : Storable>(controller: DataStoreController<T>) : Rep
     init {
         // Read the file and deserialize the contents into the cache map
         val jsonString = file.readText()
-        val type = TypeToken<T>() {}.getType()
+        val type = TypeToken<ArrayList<T>() {}.getType()
         val objects = Serializers.activeSerializer.deserialize(jsonString, type)
         objects?.forEach { obj -> cache[obj.identifier] = obj }   
     }
