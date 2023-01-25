@@ -13,7 +13,7 @@ import com.google.gson.reflect.TypeToken
 class AsyncFlatFileRepository<T : Storable>(controller: DataStoreController<T>) : AsyncRepository<T> {
 
     val file: File = File(controller.directory, controller.classType.simpleName + ".json").also {
-        if (!it.exists()) it.mkdir()
+        if (!it.exists()) it.createNewFile()
     }
 
     val cache = mutableMapOf<String, T>()

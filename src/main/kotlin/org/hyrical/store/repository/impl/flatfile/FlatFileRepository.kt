@@ -11,7 +11,7 @@ import com.google.gson.reflect.TypeToken
 class FlatFileRepository<T : Storable>(controller: DataStoreController<T>) : Repository<T> {
 
     val file: File = File(controller.directory, controller.classType.simpleName + ".json").also {
-        if (!it.exists()) it.mkdir()
+        if (!it.exists()) it.createNewFile()
     }
 
     val cache = mutableMapOf<String, T>()

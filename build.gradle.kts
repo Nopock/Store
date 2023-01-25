@@ -7,7 +7,7 @@ plugins {
     id("java-library")
 }
 
-val sematicVersion = "1.53"
+val sematicVersion = "1.54"
 
 group = "org.hyrical"
 version = sematicVersion
