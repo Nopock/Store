@@ -7,8 +7,11 @@ plugins {
     id("java-library")
 }
 
+val sematicVersion = "1.53"
+
 group = "org.hyrical"
-version = "1.0"
+version = sematicVersion
+
 
 repositories {
     mavenCentral()
@@ -35,7 +38,7 @@ publishing {
         create<MavenPublication>("maven") {
             groupId = "org.hyrical"
             artifactId = "store"
-            version = "2.12"
+            version = sematicVersion
 
             from(components["java"])
         }
