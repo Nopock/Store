@@ -23,6 +23,8 @@ dependencies {
     implementation("org.slf4j:slf4j-api:2.0.6")
     testImplementation(kotlin("test"))
     compileOnly("io.projectreactor:reactor-core:3.5.2")
+    // https://mvnrepository.com/artifact/com.google.code.gson/gson
+    implementation("com.google.code.gson:gson:2.10.1")
 }
 
 tasks.test {
