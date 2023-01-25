@@ -24,7 +24,6 @@ dependencies {
     testImplementation(kotlin("test"))
     compileOnly("io.projectreactor:reactor-core:3.5.2")
     // https://mvnrepository.com/artifact/com.google.code.gson/gson
-    implementation("com.google.code.gson:gson:2.10.1")
 }
 
 tasks.test {
@@ -44,5 +43,11 @@ publishing {
 
             from(components["java"])
         }
+    }
+}
+
+configurations.all {
+    resolutionStrategy {
+        force("com.google.code.gson:gson:2.10.1")
     }
 }
