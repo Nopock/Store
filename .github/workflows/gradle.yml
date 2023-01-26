@@ -35,7 +35,6 @@ jobs:
 
     - name: Request JitPack build
       if: steps.build.outputs.status != 'failure'
-      uses: pr-mpt/actions-commit-hash@v2
       env:
         COMMIT_ID: ${{ env.SHORT_SHA }}
       run: curl -s 30 -X POST https://jitpack.io/com/github/Nopock/Store/${{ steps.commit.outputs.short }}/build
