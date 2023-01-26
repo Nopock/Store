@@ -74,7 +74,6 @@
 
 ## Roadmap
 
-- Better MongoDB and redis connections
 - Add support for kotlinx.coroutines
 - Wrapper for return types
 - Add support for FileConnection
