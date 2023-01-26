@@ -34,4 +34,4 @@ jobs:
       if: steps.build.outputs.status != 'failure'
       env:
         COMMIT_ID: ${{ env.SHORT_SHA }}
-      run: curl -s 30 -X POST https://jitpack.io/com/github/Nopock/Store/${{ steps.commit.outputs.short }}/build
+      run: curl --connect-timeout 30 -X POST https://jitpack.io/com/github/Nopock/Store/${{ steps.commit.outputs.short }}/build
