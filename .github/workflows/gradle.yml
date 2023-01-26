@@ -27,10 +27,11 @@ jobs:
     
     - name: Get commit ID
       if: steps.build.outputs.status != 'failure'
-      run: echo "SHORT_SHA=`echo ${GITHUB_SHA} | cut -c1-8`" >> $GITHUB_ENV
+      run: echo "SHORT_SHA=`echo ${GITHUB_SHA} | cut -c1-8`" >> $GITHUB_ENV]
 
     - name: Request JitPack build
       if: steps.build.outputs.status != 'failure'
-      run: curl -X POST https://jitpack.io/com/github/Nopock/Store/${SHORT_SHA}/build
       env:
         COMMIT_ID: ${{ env.SHORT_SHA }}
+      run: echo ${SHORT_SHA}
+      run: curl -X POST https://jitpack.io/com/github/Nopock/Store/${SHORT_SHA}/build
