@@ -6,6 +6,9 @@ jobs:
   build:
 
     runs-on: ubuntu-latest
+    
+    env:
+      ACTIONS_ALLOW_UNSECURE_COMMANDS: true
 
     steps:
     - uses: actions/checkout@v3
@@ -16,5 +19,16 @@ jobs:
         distribution: temurin
     - name: Change wrapper permissions
       run: chmod +x ./gradlew
+    
     - name: Build with Gradle
+      id: build
       run: ./gradlew build
+    
+    - name: Get commit ID
+      if: steps.build.outputs.status == 'failure'
+      run: echo ::set-env name=COMMIT_ID::$(git rev-parse HEAD)
+
+    - name: Request JitPack build
+      run: curl -X POST https://jitpack.io/com/github/Nopock/Store/COMMIT_ID/build
+      env:
+        COMMIT_ID: ${{ env.COMMIT_ID }}
