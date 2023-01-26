@@ -23,7 +23,7 @@ jobs:
     
     - name: Build with Gradle
       id: build
-      run: ./gradlew build
+      run: ./gradlew build --no-daemon
     
     - name: Get commit ID
       if: steps.build.outputs.status == 'failure'
