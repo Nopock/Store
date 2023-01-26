@@ -30,6 +30,6 @@ jobs:
       run: echo ::set-env name=COMMIT_ID::$(git rev-parse HEAD)
 
     - name: Request JitPack build
-      run: curl -X POST https://jitpack.io/com/github/Nopock/Store/$COMMIT_ID/build
+      run: curl -X POST https://jitpack.io/com/github/Nopock/Store/${COMMIT_ID}/build
       env:
         COMMIT_ID: ${{ env.COMMIT_ID }}
