@@ -33,5 +33,4 @@ jobs:
       if: steps.build.outputs.status != 'failure'
       env:
         COMMIT_ID: ${{ env.SHORT_SHA }}
-      run: echo ${SHORT_SHA}
       run: curl -X POST https://jitpack.io/com/github/Nopock/Store/${SHORT_SHA}/build
