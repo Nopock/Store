@@ -37,8 +37,8 @@ jobs:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       with:
         body: "This is an automatic release via `Github Actions`. There will be updated patch notes shortly..."
-        tag_name: v3.98
-        release_name: Release v3.98
+        tag_name: ${{ secrets.RELEASE_VERSION}}
+        release_name: Release ${{ secrets.RELEASE_VERSION }}
         draft: false
         prerelease: false
     
