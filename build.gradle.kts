@@ -7,10 +7,8 @@ plugins {
     id("java-library")
 }
 
-val sematicVersion = "1.54"
-
 group = "org.hyrical"
-version = sematicVersion
+version = "1.0"
 
 
 repositories {
