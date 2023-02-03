@@ -37,13 +37,13 @@ jobs:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       with:
         body: "This is an automatic release via `Github Actions`. There will be updated patch notes shortly..."
-        tag_name: ${{ env.RELEASE_VERSION }}
-        release_name: Release ${{ env.RELEASE_VERSION }}
+        tag_name: v3.98
+        release_name: Release v3.98
         draft: false
         prerelease: false
     
     - name: Upload Jar to Github
-      if: "contains(github.event.head_commit.message, '--release') && contains(github.ref, 'master')"
+      if: "contains(github.event.head_commit.message, '--release') && contains(github.ref, 'main')"
       uses: actions/upload-release-asset@v1
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
