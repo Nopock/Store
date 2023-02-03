@@ -38,7 +38,7 @@ publishing {
         create<MavenPublication>("maven") {
             groupId = "org.hyrical"
             artifactId = "store"
-            version = sematicVersion
+            version = "1.0"
 
             from(components["java"])
         }
