@@ -45,7 +45,7 @@ jobs:
           }
 
           dependencies {
-              implementation("com.github.Nopock:Store:v4.01")
+              implementation("com.github.Nopock:Store:${{ secrets.RELEASE_VERSION }}")
           }
           ```
           `pom.xml`
@@ -61,7 +61,7 @@ jobs:
               <depedency>
                   <groupId>com.github.Nopock</groupId>
                   <artifactId>Store</artifactId>
-                  <version>v4.01</version>
+                  <version>${{ secrets.RELEASE_VERSION }}</version>
               </dependency>
           </dependencies>
           ```
