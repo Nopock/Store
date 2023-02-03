@@ -36,7 +36,35 @@ jobs:
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       with:
-        body: "This is an automatic release via `Github Actions`. There will be updated patch notes shortly..."
+        body: |
+          "This is an automatic release via `Github Actions`. There will be updated patch notes shortly..."
+          "`build.gradle.kts`"
+          "```kts"
+          "repositories {"
+          "    maven("https://jitpack.io")"
+          "}"
+          " "
+          "dependencies {"
+          "    implementation("com.github.Nopock:Store:v4.01")"
+          "}"
+          "```"
+          "`pom.xml`"
+          "```xml"
+          "<repositories>"
+          "    <repository>"
+          "        <id>jitpack</id>"
+          "        <url>https://jitpack.io</url>"
+          "    </repository>"
+          "</repositories>"
+          " "
+          "<dependencies>"
+          "    <depedency>"
+          "        <groupId>com.github.Nopock</groupId>"
+          "        <artifactId>Store</artifactId>"
+          "        <version>v4.01</version>"
+          "    </dependency>"
+          "</dependencies>"
+          "```"
         tag_name: ${{ secrets.RELEASE_VERSION}}
         release_name: Release ${{ secrets.RELEASE_VERSION }}
         draft: false
