@@ -38,6 +38,7 @@ jobs:
       with:
         body: |
           This is an automatic release via `Github Actions`. There will be updated patch notes shortly...
+          
           `build.gradle.kts`
           ```kts
           repositories {
