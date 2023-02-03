@@ -1,6 +1,10 @@
-name: Java CI
+name: CI
 
-on: [push]
+on:
+  push:
+    branches: [main]
+  
+  workflow_dispatch:
 
 jobs:
   build:
@@ -24,14 +28,27 @@ jobs:
     - name: Build with Gradle
       id: build
       run: ./gradlew build --no-daemon
-    
-    - name: Get commit ID
-      if: steps.build.outputs.status != 'failure'
-      id: commit
-      uses: pr-mpt/actions-commit-hash@v2
 
-    - name: Request JitPack build
-      if: steps.build.outputs.status != 'failure'
+    - name: Create Github Release
+      if: "contains(github.event.head_commit.message, '--release') && contains(github.ref, 'main')"
+      id: create_release
+      uses: actions/create-release@v1
       env:
-        COMMIT_ID: ${{ env.SHORT_SHA }}
-      run: curl -s -m 30 -X POST https://jitpack.io/com/github/Nopock/Store/${{ steps.commit.outputs.short }}/build || true
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      with:
+        body: "This is an automatic release via `Github Actions`. There will be updated patch notes shortly..."
+        tag_name: ${{ env.RELEASE_VERSION }}
+        release_name: Release ${{ env.RELEASE_VERSION }}
+        draft: false
+        prerelease: false
+    
+    - name: Upload Jar to Github
+      if: "contains(github.event.head_commit.message, '--release') && contains(github.ref, 'master')"
+      uses: actions/upload-release-asset@v1
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      with:
+        upload_url: ${{ steps.create_release.outputs.upload_url }}
+        asset_path: /home/runner/work/Nopock/Store/build/libs/Store.jar
+        asset_name: Store.jar
+        asset_content_type: application/jar
