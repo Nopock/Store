@@ -1,5 +1,5 @@
 name: CI
-
+# Make sure to append --release to your commit msgs for a release and update the repository secret with the new version starting with v
 on:
   push:
     branches: [main]
