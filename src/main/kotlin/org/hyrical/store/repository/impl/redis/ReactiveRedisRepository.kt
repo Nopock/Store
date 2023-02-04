@@ -3,10 +3,10 @@ package org.hyrical.store.repository.impl.redis
 import org.hyrical.store.DataStoreController
 import org.hyrical.store.Storable
 import org.hyrical.store.connection.redis.RedisConnection
+import org.hyrical.store.repository.ReactiveRepository
 import org.hyrical.store.serializers.Serializers
 import reactor.core.publisher.Flux
 import reactor.core.publisher.Mono
-import org.hyrical.store.repository.ReactiveRepository
 
 class ReactiveRedisRepository<T: Storable>(private val controller: DataStoreController<T>, val connection: RedisConnection) : ReactiveRepository<T> {
 

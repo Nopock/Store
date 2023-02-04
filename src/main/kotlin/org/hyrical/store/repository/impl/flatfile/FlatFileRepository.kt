@@ -1,13 +1,11 @@
 package org.hyrical.store.repository.impl.flatfile
 
+import com.google.gson.reflect.TypeToken
 import org.hyrical.store.DataStoreController
 import org.hyrical.store.Storable
+import org.hyrical.store.connection.flatfile.FlatFileConnection
 import org.hyrical.store.repository.Repository
 import org.hyrical.store.serializers.Serializers
-import java.io.File
-import java.util.ArrayList
-import com.google.gson.reflect.TypeToken
-import org.hyrical.store.connection.flatfile.FlatFileConnection
 
 class FlatFileRepository<T : Storable>(controller: DataStoreController<T>, val connection: FlatFileConnection) : Repository<T> {
 

@@ -11,7 +11,6 @@ import org.hyrical.store.repository.ReactiveRepository
 import org.hyrical.store.serializers.Serializers
 import reactor.core.publisher.Flux
 import reactor.core.publisher.Mono
-import java.lang.UnsupportedOperationException
 
 class ReactiveMongoRepository<T: Storable>(private val controller: DataStoreController<T>, val connection: MongoConnection) : ReactiveRepository<T> {
     val collection: MongoCollection<Document> = connection.useResourceWithReturn {

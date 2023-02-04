@@ -2,11 +2,10 @@ package org.hyrical.store
 
 import org.hyrical.store.connection.DatabaseConnection
 import org.hyrical.store.repository.AsyncRepository
+import org.hyrical.store.repository.CoroutineRepository
 import org.hyrical.store.repository.ReactiveRepository
 import org.hyrical.store.repository.Repository
 import org.hyrical.store.type.StorageType
-import java.lang.reflect.ParameterizedType
-import java.util.UUID
 
 /**
  * The object that handles creating new [Repository]'s and
@@ -51,6 +50,10 @@ class DataStoreController<T : Storable>(private val type: StorageType, val class
 
     val reactiveRepository: ReactiveRepository<T> by lazy {
         type.buildReactive(this, connection)
+    }
+
+    val coroutineRepository: CoroutineRepository<T> by lazy {
+        type.buildCoroutine(this, connection)
     }
 
     var directory: String = ""

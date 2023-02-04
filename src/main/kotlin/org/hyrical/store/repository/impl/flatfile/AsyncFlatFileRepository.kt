@@ -1,15 +1,13 @@
 package org.hyrical.store.repository.impl.flatfile
 
+import com.google.gson.reflect.TypeToken
 import org.hyrical.store.DataStoreController
 import org.hyrical.store.Storable
+import org.hyrical.store.connection.flatfile.FlatFileConnection
 import org.hyrical.store.repository.AsyncRepository
 import org.hyrical.store.serializers.Serializers
 import java.io.File
-import java.io.FileReader
-import java.util.ArrayList
 import java.util.concurrent.CompletableFuture
-import com.google.gson.reflect.TypeToken
-import org.hyrical.store.connection.flatfile.FlatFileConnection
 
 class AsyncFlatFileRepository<T : Storable>(controller: DataStoreController<T>, val connection: FlatFileConnection) : AsyncRepository<T> {
 

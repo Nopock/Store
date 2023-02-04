@@ -7,17 +7,21 @@ import org.hyrical.store.connection.flatfile.FlatFileConnection
 import org.hyrical.store.connection.mongo.MongoConnection
 import org.hyrical.store.connection.redis.RedisConnection
 import org.hyrical.store.repository.AsyncRepository
+import org.hyrical.store.repository.CoroutineRepository
 import org.hyrical.store.repository.ReactiveRepository
 import org.hyrical.store.repository.Repository
 import org.hyrical.store.repository.impl.flatfile.AsyncFlatFileRepository
+import org.hyrical.store.repository.impl.flatfile.CoroutineFlatFileRepository
 import org.hyrical.store.repository.impl.flatfile.FlatFileRepository
 import org.hyrical.store.repository.impl.flatfile.ReactiveFlatFileRepository
 import org.hyrical.store.repository.impl.mongodb.AsyncMongoRepository
+import org.hyrical.store.repository.impl.mongodb.CoroutineMongoRepository
 import org.hyrical.store.repository.impl.mongodb.MongoRepository
 import org.hyrical.store.repository.impl.mongodb.ReactiveMongoRepository
 import org.hyrical.store.repository.impl.redis.AsyncRedisRepository
-import org.hyrical.store.repository.impl.redis.RedisRepository
+import org.hyrical.store.repository.impl.redis.CoroutineRedisRepository
 import org.hyrical.store.repository.impl.redis.ReactiveRedisRepository
+import org.hyrical.store.repository.impl.redis.RedisRepository
 
 /**
  * The type of storage to be used whilst persisting data.
@@ -39,6 +43,10 @@ enum class StorageType {
         override fun <T : Storable> buildReactive(controller: DataStoreController<T>, connection: DatabaseConnection<*, *>?): ReactiveRepository<T> {
             return ReactiveMongoRepository(controller, connection as MongoConnection)
         }
+
+        override fun <T : Storable> buildCoroutine(controller: DataStoreController<T>, connection: DatabaseConnection<*, *>?): CoroutineRepository<T> {
+            return CoroutineMongoRepository(controller, connection as MongoConnection)
+        }
     },
 
     REDIS() {
@@ -53,6 +61,10 @@ enum class StorageType {
         override fun <T : Storable> buildReactive(controller: DataStoreController<T>, connection: DatabaseConnection<*, *>?): ReactiveRepository<T> {
             return ReactiveRedisRepository(controller, connection as RedisConnection)
         }
+
+        override fun <T : Storable> buildCoroutine(controller: DataStoreController<T>, connection: DatabaseConnection<*, *>?): CoroutineRepository<T> {
+            return CoroutineRedisRepository(controller, connection as RedisConnection)
+        }
     },
 
     FLAT_FILE() {
@@ -66,6 +78,10 @@ enum class StorageType {
 
         override fun <T : Storable> buildReactive(controller: DataStoreController<T>, connection: DatabaseConnection<*, *>?): ReactiveRepository<T> {
             return ReactiveFlatFileRepository(controller, connection as FlatFileConnection)
+        }
+
+        override fun <T : Storable> buildCoroutine(controller: DataStoreController<T>, connection: DatabaseConnection<*, *>?): CoroutineRepository<T> {
+            return CoroutineFlatFileRepository(controller, connection as FlatFileConnection)
         }
     };
 
@@ -89,4 +105,11 @@ enum class StorageType {
      * @param [controller] The owning [DataStoreController]
      */
     abstract fun <T : Storable> buildReactive(controller: DataStoreController<T>, connection: DatabaseConnection<*, *>?): ReactiveRepository<T>
+
+    /**
+     * Builds and initiates the [ReactiveRepository]
+     *
+     * @param [controller] The owning [DataStoreController]
+     */
+    abstract fun <T : Storable> buildCoroutine(controller: DataStoreController<T>, connection: DatabaseConnection<*, *>?): CoroutineRepository<T>
 }

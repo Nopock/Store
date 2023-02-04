@@ -1,6 +1,5 @@
 package org.hyrical.store.connection.flatfile
 
-import com.mongodb.client.MongoDatabase
 import org.hyrical.store.connection.DatabaseConnection
 import java.io.File
 

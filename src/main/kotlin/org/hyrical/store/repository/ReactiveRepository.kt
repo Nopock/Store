@@ -1,5 +1,6 @@
 package org.hyrical.store.repository
 
+import org.hyrical.store.DataStoreController
 import org.hyrical.store.Storable
 import reactor.core.publisher.Flux
 import reactor.core.publisher.Mono

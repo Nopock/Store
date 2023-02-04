@@ -8,7 +8,6 @@ import org.hyrical.store.Storable
 import org.hyrical.store.connection.mongo.MongoConnection
 import org.hyrical.store.repository.AsyncRepository
 import org.hyrical.store.serializers.Serializers
-import java.lang.UnsupportedOperationException
 import java.util.concurrent.CompletableFuture
 
 class AsyncMongoRepository<T : Storable>(private val controller: DataStoreController<T>, val connection: MongoConnection) : AsyncRepository<T> {

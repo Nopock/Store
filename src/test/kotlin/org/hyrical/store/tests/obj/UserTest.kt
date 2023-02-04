@@ -1,7 +1,7 @@
 package org.hyrical.store.tests.obj
 
 import org.hyrical.store.Storable
-import java.util.UUID
+import java.util.*
 
 data class UserTest(
     override val identifier: String,
