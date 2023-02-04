@@ -28,7 +28,11 @@ class FlatFileConnection(val directory: String, val fileName: String) : Database
     }
 
     override fun createNewConnection(): File {
-        return File("$directory$fileName.json")
+        return File("$directory$fileName.json").apply {
+            if (!exists()) {
+                createNewFile()
+            }
+        }
     }
 
     override fun setConnection(connection: File) {
