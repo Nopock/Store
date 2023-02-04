@@ -1,6 +1,7 @@
 package org.hyrical.store.tests.flatfile
 
 import org.hyrical.store.DataStoreController
+import org.hyrical.store.connection.flatfile.FlatFileConnection
 import org.hyrical.store.tests.obj.UserTest
 import org.hyrical.store.type.StorageType
 import org.junit.jupiter.api.Test
@@ -9,9 +10,7 @@ import kotlin.test.assertEquals
 class FlatFileTests {
 
     private val controller by lazy {
-        DataStoreController.of<UserTest>(StorageType.FLAT_FILE).apply {
-            bindFlatFileDirectory(FlatFileTests::class.java.protectionDomain.codeSource.location.toURI().path)
-        }
+        DataStoreController.of<UserTest>(StorageType.FLAT_FILE, FlatFileConnection(FlatFileTests::class.java.protectionDomain.codeSource.location.toURI().path, "flatfile_tests"))
     }
 
     @Test
