@@ -9,21 +9,24 @@ import java.io.FileReader
 import java.util.ArrayList
 import java.util.concurrent.CompletableFuture
 import com.google.gson.reflect.TypeToken
+import org.hyrical.store.connection.flatfile.FlatFileConnection
 
-class AsyncFlatFileRepository<T : Storable>(controller: DataStoreController<T>) : AsyncRepository<T> {
+class AsyncFlatFileRepository<T : Storable>(controller: DataStoreController<T>, val connection: FlatFileConnection) : AsyncRepository<T> {
 
     val file: File = File(controller.directory, controller.classType.simpleName + ".json").also {
         if (!it.exists()) it.createNewFile()
     }
 
     val cache = mutableMapOf<String, T>()
-    
+
     init {
         // Read the file and deserialize the contents into the cache map
-        val jsonString = file.readText()
+        val jsonString = connection.useResourceWithReturn {
+            readText()
+        }
         val type = TypeToken.getParameterized(ArrayList::class.java, controller.classType).type
         val objects = Serializers.activeSerializer.deserialize<ArrayList<T>>(jsonString, type)
-        objects?.forEach { obj -> cache[obj.identifier] = obj }   
+        objects?.forEach { obj -> cache[obj.identifier] = obj }
     }
 
     /**
@@ -95,6 +98,11 @@ class AsyncFlatFileRepository<T : Storable>(controller: DataStoreController<T>) 
     private fun persistToFile() {
         // Serialize the cache map and write it to the file
         val jsonString = Serializers.activeSerializer.serialize(cache.values)
-        file.writeText(jsonString!!)
+
+        connection.useResource {
+            if (jsonString != null) {
+                writeText(jsonString)
+            }
+        }
     }
 }

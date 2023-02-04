@@ -3,6 +3,7 @@ package org.hyrical.store.type
 import org.hyrical.store.DataStoreController
 import org.hyrical.store.Storable
 import org.hyrical.store.connection.DatabaseConnection
+import org.hyrical.store.connection.flatfile.FlatFileConnection
 import org.hyrical.store.connection.mongo.MongoConnection
 import org.hyrical.store.connection.redis.RedisConnection
 import org.hyrical.store.repository.AsyncRepository
@@ -56,15 +57,15 @@ enum class StorageType {
 
     FLAT_FILE() {
         override fun <T : Storable> build(controller: DataStoreController<T>, connection: DatabaseConnection<*, *>?): Repository<T> {
-            return FlatFileRepository(controller)
+            return FlatFileRepository(controller, connection as FlatFileConnection)
         }
 
         override fun <T : Storable> buildAsync(controller: DataStoreController<T>, connection: DatabaseConnection<*, *>?): AsyncRepository<T> {
-            return AsyncFlatFileRepository(controller)
+            return AsyncFlatFileRepository(controller, connection as FlatFileConnection)
         }
 
         override fun <T : Storable> buildReactive(controller: DataStoreController<T>, connection: DatabaseConnection<*, *>?): ReactiveRepository<T> {
-            return ReactiveFlatFileRepository(controller)
+            return ReactiveFlatFileRepository(controller, connection as FlatFileConnection)
         }
     };
 

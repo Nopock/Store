@@ -25,7 +25,7 @@ class MongoConnection(val details: AbstractMongoDetail, val database: String) : 
         handle = connection
     }
 
-    fun getAppliedResource(): MongoDatabase {
+    private fun getAppliedResource(): MongoDatabase {
         return try {
             getConnection().getDatabase(database)
         } catch (ignored: Exception) {
