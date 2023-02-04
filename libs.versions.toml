@@ -3,7 +3,7 @@ redis = "4.3.1"
 mongo = "3.12.11"
 reactor-core = "3.5.2"
 gson = "2.10.1"
-coroutines = "1.5.2"
+coroutines = "1.6.4"
 
 [libraries]
 jedis = { module = "redis.clients:jedis", version.ref = "redis" }
