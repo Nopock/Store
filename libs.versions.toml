@@ -4,6 +4,7 @@ mongo = "3.12.11"
 reactor-core = "3.5.2"
 gson = "2.10.1"
 coroutines = "1.6.4"
+guava = "23.0"
 
 [libraries]
 jedis = { module = "redis.clients:jedis", version.ref = "redis" }
@@ -11,3 +12,4 @@ mongo = { module = "org.mongodb:mongo-java-driver", version.ref = "mongo" }
 reactor-core = { module = "io.projectreactor:reactor-core", version.ref = "reactor-core" }
 gson = { module = "com.google.code.gson:gson", version.ref = "gson" }
 coroutines = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-core", version.ref = "coroutines" }
+guava = { module = "com.google.guava:guava", version.ref = "guava" }

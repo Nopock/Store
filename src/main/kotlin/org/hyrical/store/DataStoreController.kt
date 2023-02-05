@@ -1,5 +1,6 @@
 package org.hyrical.store
 
+import com.google.common.collect.HashBasedTable
 import org.hyrical.store.connection.DatabaseConnection
 import org.hyrical.store.repository.AsyncRepository
 import org.hyrical.store.repository.CoroutineRepository
@@ -20,6 +21,22 @@ import org.hyrical.store.type.StorageType
 class DataStoreController<T : Storable>(private val type: StorageType, val classType: Class<T>, val connection: DatabaseConnection<*, *>?) {
 
     companion object {
+
+		/**
+		 * A map of all the [DataStoreController]'s that have been created.
+		 */
+		private val existingControllers: HashBasedTable<Class<Storable>, StorageType, DataStoreController<*>> = HashBasedTable.create()
+
+		/**
+		 * @param [T] The type of [Storable] to be stored.
+		 * @param [type] The type of [StorageType] to be used.
+		 *
+		 * @return [DataStoreController<T>] The [DataStoreController] for the given [T] and [type].
+		 */
+		@JvmStatic
+		fun existing(type: StorageType, classType: Class<Storable>): DataStoreController<*>? {
+			return existingControllers.get(classType, type)
+		}
 
         /**
          * Creates a new instance of the [DataStoreController] with

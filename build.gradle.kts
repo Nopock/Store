@@ -20,7 +20,8 @@ dependencies {
     compileOnly(libs.mongo)
     compileOnly(libs.reactor.core)
     implementation(libs.gson)
-    compileOnly(libs.coroutines)
+	implementation(libs.guava)
+	compileOnly(libs.coroutines)
 
 	testImplementation(kotlin("test"))
 }
