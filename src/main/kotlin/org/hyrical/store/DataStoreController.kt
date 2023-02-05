@@ -20,12 +20,16 @@ import org.hyrical.store.type.StorageType
  */
 class DataStoreController<T : Storable>(private val type: StorageType, val classType: Class<T>, val connection: DatabaseConnection<*, *>?) {
 
+	init {
+	    existingControllers.put(classType, type, this)
+	}
+
     companion object {
 
 		/**
 		 * A map of all the [DataStoreController]'s that have been created.
 		 */
-		private val existingControllers: HashBasedTable<Class<Storable>, StorageType, DataStoreController<*>> = HashBasedTable.create()
+		private val existingControllers: HashBasedTable<Class<*>, StorageType, DataStoreController<*>> = HashBasedTable.create()
 
 		/**
 		 * @param [T] The type of [Storable] to be stored.
