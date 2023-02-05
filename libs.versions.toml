@@ -4,7 +4,7 @@ mongo = "3.12.11"
 reactor-core = "3.5.2"
 gson = "2.10.1"
 coroutines = "1.6.4"
-guava = "23.0"
+guava = "31.1-jre"
 
 [libraries]
 jedis = { module = "redis.clients:jedis", version.ref = "redis" }
