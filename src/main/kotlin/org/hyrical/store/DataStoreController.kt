@@ -32,7 +32,7 @@ class DataStoreController<T : Storable>(private val type: StorageType, val class
 		private val existingControllers: HashBasedTable<Class<*>, StorageType, DataStoreController<*>> = HashBasedTable.create()
 
 		/**
-		 * @param [T] The type of [Storable] to be stored.
+		 * @param [classType] The type of [Storable] to be stored.
 		 * @param [type] The type of [StorageType] to be used.
 		 *
 		 * @return [DataStoreController<T>] The [DataStoreController] for the given [T] and [type].
