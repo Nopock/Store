@@ -63,9 +63,9 @@
 ```kt
     DataTypeResources.enableMongoRepositories("localhost", 27017, "Database")
 
-    val controller = DataStoreController.of<ExampleData>(StorageType.MONGO)
+val controller = DataStoreController.of<ExampleData>(StorageType.MONGO)
 
-    controller.repository.save(ExampleData(UUID.randomUUID().toString(), "Hello World!", 10))
+controller.repository.save(ExampleData(UUID.randomUUID().toString(), "Hello World!", 10))
 ```
 
 ```kt
@@ -87,10 +87,10 @@
 * Twitter: [@RealRepation](https://twitter.com/RealRepation)
 * Github: [@Nopock](https://github.com/Nopock)
 
-
 ## 🤝 Contributing
 
-Contributions, issues and feature requests are welcome!<br />Feel free to check [issues page](https://github.com/Nopock/Store/issues). 
+Contributions, issues and feature requests are welcome!<br />Feel free to
+check [issues page](https://github.com/Nopock/Store/issues).
 
 ## Show your support
 

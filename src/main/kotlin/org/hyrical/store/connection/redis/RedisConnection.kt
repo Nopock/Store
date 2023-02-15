@@ -1,3 +1,27 @@
+/*
+ * MIT License
+ *
+ * Copyright (c) 2023 Nathan Weisz
+ *
+ * Permission is hereby granted, free of charge, to any person obtaining a copy
+ * of this software and associated documentation files (the "Software"), to deal
+ * in the Software without restriction, including without limitation the rights
+ * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+ * copies of the Software, and to permit persons to whom the Software is
+ * furnished to do so, subject to the following conditions:
+ *
+ * The above copyright notice and this permission notice shall be included in all
+ * copies or substantial portions of the Software.
+ *
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+ * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+ * SOFTWARE.
+ */
+
 package org.hyrical.store.connection.redis
 
 import org.hyrical.store.connection.DatabaseConnection
@@ -8,49 +32,48 @@ import redis.clients.jedis.exceptions.JedisException
 
 class RedisConnection(val details: AbstractRedisDetail) : DatabaseConnection<JedisPool, Jedis> {
 
-    lateinit var handle: JedisPool
+	lateinit var handle: JedisPool
 
-    override fun <T> useResourceWithReturn(lambda: Jedis.() -> T): T? {
-        return try {
-            val applied = getAppliedResource()
+	override fun <T> useResourceWithReturn(lambda: Jedis.() -> T): T? {
+		return try {
+			val applied = getAppliedResource()
 
-            val resource = lambda.invoke(applied)
-            applied.close()
+			val resource = lambda.invoke(applied)
+			applied.close()
 
-            resource
-        } catch (exception: JedisException) {
-            null
-        }
-    }
+			resource
+		} catch (exception: JedisException) {
+			null
+		}
+	}
 
-    override fun setConnection(connection: JedisPool) {
-        handle = connection
-    }
+	override fun setConnection(connection: JedisPool) {
+		handle = connection
+	}
 
-    fun getAppliedResource(): Jedis {
-        return try {
-            handle.resource
-        } catch (exception: Exception) {
-            val connection = createNewConnection()
-            setConnection(connection)
+	fun getAppliedResource(): Jedis {
+		return try {
+			handle.resource
+		} catch (exception: Exception) {
+			val connection = createNewConnection()
+			setConnection(connection)
 
-            connection.resource
-        }
-    }
+			connection.resource
+		}
+	}
 
-    override fun useResource(lambda: Jedis.() -> Unit) {
-        val applied = getAppliedResource()
-        lambda.invoke(applied)
+	override fun useResource(lambda: Jedis.() -> Unit) {
+		val applied = getAppliedResource()
+		lambda.invoke(applied)
 
-        applied.close()
-    }
+		applied.close()
+	}
 
-    override fun getConnection(): JedisPool {
-        return handle
-    }
+	override fun getConnection(): JedisPool {
+		return handle
+	}
 
-    override fun createNewConnection(): JedisPool
-    {
-        return details.getPool()
-    }
+	override fun createNewConnection(): JedisPool {
+		return details.getPool()
+	}
 }

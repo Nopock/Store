@@ -2,7 +2,7 @@ name: CI
 # Make sure to append --release to your commit msgs for a release and update the repository secret with the new version starting with v
 on:
   push:
-    branches: [main]
+    branches: [ main ]
   
   workflow_dispatch:
 
@@ -15,71 +15,71 @@ jobs:
       ACTIONS_ALLOW_UNSECURE_COMMANDS: true
 
     steps:
-    - uses: actions/checkout@v3
-    - name: Set up JDK 1.8
-      uses: actions/setup-java@v3
-      with:
-        java-version: 8.0.352+8
-        distribution: temurin
-        cache: 'gradle'
-    - name: Change wrapper permissions
-      run: chmod +x ./gradlew
-    
-    - name: Build with Gradle
-      id: build
-      run: ./gradlew build --no-daemon
+      - uses: actions/checkout@v3
+      - name: Set up JDK 1.8
+        uses: actions/setup-java@v3
+        with:
+          java-version: 8.0.352+8
+          distribution: temurin
+          cache: 'gradle'
+      - name: Change wrapper permissions
+        run: chmod +x ./gradlew
 
-    - name: Create Github Release
-      if: "contains(github.event.head_commit.message, '--release') && contains(github.ref, 'main')"
-      id: create_release
-      uses: actions/create-release@v1
-      env:
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-      with:
-        body: |
-          # Changes
-          - This is an automatic release...
-          - These notes will be updated shortly :)
-          
-          `build.gradle.kts`
-          ```kts
-          repositories {
-              maven("https://jitpack.io")
-          }
+      - name: Build with Gradle
+        id: build
+        run: ./gradlew build --no-daemon
 
-          dependencies {
-              implementation("com.github.Nopock:Store:${{ secrets.RELEASE_VERSION }}")
-          }
-          ```
-          `pom.xml`
-          ```xml
-          <repositories>
-              <repository>
-                  <id>jitpack</id>
-                  <url>https://jitpack.io</url>
-              </repository>
-          </repositories>
+      - name: Create Github Release
+        if: "contains(github.event.head_commit.message, '--release') && contains(github.ref, 'main')"
+        id: create_release
+        uses: actions/create-release@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          body: |
+            # Changes
+            - This is an automatic release...
+            - These notes will be updated shortly :)
+            
+            `build.gradle.kts`
+            ```kts
+            repositories {
+                maven("https://jitpack.io")
+            }
+            
+            dependencies {
+                implementation("com.github.Nopock:Store:${{ secrets.RELEASE_VERSION }}")
+            }
+            ```
+            `pom.xml`
+            ```xml
+            <repositories>
+                <repository>
+                    <id>jitpack</id>
+                    <url>https://jitpack.io</url>
+                </repository>
+            </repositories>
+            
+            <dependencies>
+                <depedency>
+                    <groupId>com.github.Nopock</groupId>
+                    <artifactId>Store</artifactId>
+                    <version>${{ secrets.RELEASE_VERSION }}</version>
+                </dependency>
+            </dependencies>
+            ```
+          tag_name: ${{ secrets.RELEASE_VERSION}}
+          release_name: Release ${{ secrets.RELEASE_VERSION }}
+          draft: false
+          prerelease: false
 
-          <dependencies>
-              <depedency>
-                  <groupId>com.github.Nopock</groupId>
-                  <artifactId>Store</artifactId>
-                  <version>${{ secrets.RELEASE_VERSION }}</version>
-              </dependency>
-          </dependencies>
-          ```
-        tag_name: ${{ secrets.RELEASE_VERSION}}
-        release_name: Release ${{ secrets.RELEASE_VERSION }}
-        draft: false
-        prerelease: false
-    
-    - name: Upload Jar to Github
-      if: "contains(github.event.head_commit.message, '--release') && contains(github.ref, 'main')"
-      uses: actions/upload-release-asset@v1
-      env:
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-      with:
-        upload_url: ${{ steps.create_release.outputs.upload_url }}
-        asset_path: /home/runner/work/Store/Store/build/libs/Store-1.0.jar
-        asset_name: store.jar
-        asset_content_type: application/jar
+      - name: Upload Jar to Github
+        if: "contains(github.event.head_commit.message, '--release') && contains(github.ref, 'main')"
+        uses: actions/upload-release-asset@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          upload_url: ${{ steps.create_release.outputs.upload_url }}
+          asset_path: /home/runner/work/Store/Store/build/libs/Store-1.0.jar
+          asset_name: store.jar
+          asset_content_type: application/jar

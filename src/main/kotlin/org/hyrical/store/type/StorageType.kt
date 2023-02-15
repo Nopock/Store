@@ -1,3 +1,27 @@
+/*
+ * MIT License
+ *
+ * Copyright (c) 2023 Nathan Weisz
+ *
+ * Permission is hereby granted, free of charge, to any person obtaining a copy
+ * of this software and associated documentation files (the "Software"), to deal
+ * in the Software without restriction, including without limitation the rights
+ * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+ * copies of the Software, and to permit persons to whom the Software is
+ * furnished to do so, subject to the following conditions:
+ *
+ * The above copyright notice and this permission notice shall be included in all
+ * copies or substantial portions of the Software.
+ *
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+ * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+ * SOFTWARE.
+ */
+
 package org.hyrical.store.type
 
 import org.hyrical.store.DataStoreController
@@ -31,85 +55,133 @@ import org.hyrical.store.repository.impl.redis.RedisRepository
  */
 enum class StorageType {
 
-    MONGO() {
-        override fun <T : Storable> build(controller: DataStoreController<T>, connection: DatabaseConnection<*, *>?): Repository<T> {
-            return MongoRepository(controller, connection as MongoConnection)
-        }
+	MONGO() {
+		override fun <T : Storable> build(
+			controller: DataStoreController<T>,
+			connection: DatabaseConnection<*, *>?
+		): Repository<T> {
+			return MongoRepository(controller, connection as MongoConnection)
+		}
 
-        override fun <T : Storable> buildAsync(controller: DataStoreController<T>, connection: DatabaseConnection<*, *>?): AsyncRepository<T> {
-            return AsyncMongoRepository(controller, connection as MongoConnection)
-        }
+		override fun <T : Storable> buildAsync(
+			controller: DataStoreController<T>,
+			connection: DatabaseConnection<*, *>?
+		): AsyncRepository<T> {
+			return AsyncMongoRepository(controller, connection as MongoConnection)
+		}
 
-        override fun <T : Storable> buildReactive(controller: DataStoreController<T>, connection: DatabaseConnection<*, *>?): ReactiveRepository<T> {
-            return ReactiveMongoRepository(controller, connection as MongoConnection)
-        }
+		override fun <T : Storable> buildReactive(
+			controller: DataStoreController<T>,
+			connection: DatabaseConnection<*, *>?
+		): ReactiveRepository<T> {
+			return ReactiveMongoRepository(controller, connection as MongoConnection)
+		}
 
-        override fun <T : Storable> buildCoroutine(controller: DataStoreController<T>, connection: DatabaseConnection<*, *>?): CoroutineRepository<T> {
-            return CoroutineMongoRepository(controller, connection as MongoConnection)
-        }
-    },
+		override fun <T : Storable> buildCoroutine(
+			controller: DataStoreController<T>,
+			connection: DatabaseConnection<*, *>?
+		): CoroutineRepository<T> {
+			return CoroutineMongoRepository(controller, connection as MongoConnection)
+		}
+	},
 
-    REDIS() {
-        override fun <T : Storable> build(controller: DataStoreController<T>, connection: DatabaseConnection<*, *>?): Repository<T> {
-            return RedisRepository(controller, connection as RedisConnection)
-        }
+	REDIS() {
+		override fun <T : Storable> build(
+			controller: DataStoreController<T>,
+			connection: DatabaseConnection<*, *>?
+		): Repository<T> {
+			return RedisRepository(controller, connection as RedisConnection)
+		}
 
-        override fun <T : Storable> buildAsync(controller: DataStoreController<T>, connection: DatabaseConnection<*, *>?): AsyncRepository<T> {
-            return AsyncRedisRepository(controller, connection as RedisConnection)
-        }
+		override fun <T : Storable> buildAsync(
+			controller: DataStoreController<T>,
+			connection: DatabaseConnection<*, *>?
+		): AsyncRepository<T> {
+			return AsyncRedisRepository(controller, connection as RedisConnection)
+		}
 
-        override fun <T : Storable> buildReactive(controller: DataStoreController<T>, connection: DatabaseConnection<*, *>?): ReactiveRepository<T> {
-            return ReactiveRedisRepository(controller, connection as RedisConnection)
-        }
+		override fun <T : Storable> buildReactive(
+			controller: DataStoreController<T>,
+			connection: DatabaseConnection<*, *>?
+		): ReactiveRepository<T> {
+			return ReactiveRedisRepository(controller, connection as RedisConnection)
+		}
 
-        override fun <T : Storable> buildCoroutine(controller: DataStoreController<T>, connection: DatabaseConnection<*, *>?): CoroutineRepository<T> {
-            return CoroutineRedisRepository(controller, connection as RedisConnection)
-        }
-    },
+		override fun <T : Storable> buildCoroutine(
+			controller: DataStoreController<T>,
+			connection: DatabaseConnection<*, *>?
+		): CoroutineRepository<T> {
+			return CoroutineRedisRepository(controller, connection as RedisConnection)
+		}
+	},
 
-    FLAT_FILE() {
-        override fun <T : Storable> build(controller: DataStoreController<T>, connection: DatabaseConnection<*, *>?): Repository<T> {
-            return FlatFileRepository(controller, connection as FlatFileConnection)
-        }
+	FLAT_FILE() {
+		override fun <T : Storable> build(
+			controller: DataStoreController<T>,
+			connection: DatabaseConnection<*, *>?
+		): Repository<T> {
+			return FlatFileRepository(controller, connection as FlatFileConnection)
+		}
 
-        override fun <T : Storable> buildAsync(controller: DataStoreController<T>, connection: DatabaseConnection<*, *>?): AsyncRepository<T> {
-            return AsyncFlatFileRepository(controller, connection as FlatFileConnection)
-        }
+		override fun <T : Storable> buildAsync(
+			controller: DataStoreController<T>,
+			connection: DatabaseConnection<*, *>?
+		): AsyncRepository<T> {
+			return AsyncFlatFileRepository(controller, connection as FlatFileConnection)
+		}
 
-        override fun <T : Storable> buildReactive(controller: DataStoreController<T>, connection: DatabaseConnection<*, *>?): ReactiveRepository<T> {
-            return ReactiveFlatFileRepository(controller, connection as FlatFileConnection)
-        }
+		override fun <T : Storable> buildReactive(
+			controller: DataStoreController<T>,
+			connection: DatabaseConnection<*, *>?
+		): ReactiveRepository<T> {
+			return ReactiveFlatFileRepository(controller, connection as FlatFileConnection)
+		}
 
-        override fun <T : Storable> buildCoroutine(controller: DataStoreController<T>, connection: DatabaseConnection<*, *>?): CoroutineRepository<T> {
-            return CoroutineFlatFileRepository(controller, connection as FlatFileConnection)
-        }
-    };
+		override fun <T : Storable> buildCoroutine(
+			controller: DataStoreController<T>,
+			connection: DatabaseConnection<*, *>?
+		): CoroutineRepository<T> {
+			return CoroutineFlatFileRepository(controller, connection as FlatFileConnection)
+		}
+	};
 
-    /**
-     * Builds and initiates the [Repository]
-     *
-     * @param [controller] The owning [DataStoreController]
-     */
-    abstract fun <T : Storable> build(controller: DataStoreController<T>, connection: DatabaseConnection<*, *>?): Repository<T>
+	/**
+	 * Builds and initiates the [Repository]
+	 *
+	 * @param [controller] The owning [DataStoreController]
+	 */
+	abstract fun <T : Storable> build(
+		controller: DataStoreController<T>,
+		connection: DatabaseConnection<*, *>?
+	): Repository<T>
 
-    /**
-     * Builds and initiates the [AsyncRepository]
-     *
-     * @param [controller] The owning [DataStoreController]
-     */
-    abstract fun <T : Storable> buildAsync(controller: DataStoreController<T>, connection: DatabaseConnection<*, *>?): AsyncRepository<T>
+	/**
+	 * Builds and initiates the [AsyncRepository]
+	 *
+	 * @param [controller] The owning [DataStoreController]
+	 */
+	abstract fun <T : Storable> buildAsync(
+		controller: DataStoreController<T>,
+		connection: DatabaseConnection<*, *>?
+	): AsyncRepository<T>
 
-    /**
-     * Builds and initiates the [ReactiveRepository]
-     *
-     * @param [controller] The owning [DataStoreController]
-     */
-    abstract fun <T : Storable> buildReactive(controller: DataStoreController<T>, connection: DatabaseConnection<*, *>?): ReactiveRepository<T>
+	/**
+	 * Builds and initiates the [ReactiveRepository]
+	 *
+	 * @param [controller] The owning [DataStoreController]
+	 */
+	abstract fun <T : Storable> buildReactive(
+		controller: DataStoreController<T>,
+		connection: DatabaseConnection<*, *>?
+	): ReactiveRepository<T>
 
-    /**
-     * Builds and initiates the [ReactiveRepository]
-     *
-     * @param [controller] The owning [DataStoreController]
-     */
-    abstract fun <T : Storable> buildCoroutine(controller: DataStoreController<T>, connection: DatabaseConnection<*, *>?): CoroutineRepository<T>
+	/**
+	 * Builds and initiates the [ReactiveRepository]
+	 *
+	 * @param [controller] The owning [DataStoreController]
+	 */
+	abstract fun <T : Storable> buildCoroutine(
+		controller: DataStoreController<T>,
+		connection: DatabaseConnection<*, *>?
+	): CoroutineRepository<T>
 }
