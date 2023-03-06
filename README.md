@@ -82,7 +82,7 @@ controller.repository.save(ExampleData(UUID.randomUUID().toString(), "Hello Worl
 
 ## Author
 
-👤 **Nathan Weisz**
+👤 **Nathan**
 
 * Twitter: [@RealRepation](https://twitter.com/RealRepation)
 * Github: [@Nopock](https://github.com/Nopock)
@@ -98,7 +98,7 @@ Give a ⭐️ if this project helped you!
 
 ## 📝 License
 
-Copyright © 2022 [Nathan Weisz](https://github.com/Nopock).<br />
+Copyright © 2022 [Nathan](https://github.com/Nopock).<br />
 This project is [MIT](https://github.com/Nopock/Store/blob/main/LICENSE) licensed.
 
 ***
