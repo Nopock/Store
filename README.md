@@ -77,6 +77,8 @@ controller.repository.save(ExampleData(UUID.randomUUID().toString(), "Hello Worl
 - Wrapper for return types
 - Code cleanups
 - More CI/CD
+- Add support to access the raw resources
+- Use java proxy classes to add a debugging option to the constructor that prints latency to console.
 
 ![Alt](https://repobeats.axiom.co/api/embed/d9732890507abe6f645b1c954e032aea40b39386.svg "Repobeats analytics image")
 
