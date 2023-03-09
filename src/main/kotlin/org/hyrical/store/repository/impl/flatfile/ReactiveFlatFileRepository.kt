@@ -1,7 +1,7 @@
 /*
  * MIT License
  *
- * Copyright (c) 2023 Nathan Weisz
+ * Copyright (c) 2023 Nathan
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -37,7 +37,7 @@ import java.io.File
 class ReactiveFlatFileRepository<T : Storable>(controller: DataStoreController<T>, val connection: FlatFileConnection) :
 	ReactiveRepository<T> {
 
-	val file: File = File(controller.directory, controller.classType.simpleName + ".json").also {
+	val file: File = File(connection.directory, controller.classType.simpleName + ".json").also {
 		if (!it.exists()) it.createNewFile()
 	}
 

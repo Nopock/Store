@@ -22,31 +22,30 @@
  * SOFTWARE.
  */
 
-package org.hyrical.store.tests.obj
+package org.hyrical.store.debugging
 
-import org.hyrical.store.Storable
-import java.util.*
+import java.lang.reflect.InvocationHandler
+import java.lang.reflect.Method
+import java.util.logging.Logger
 
-data class UserTest(
-	override val identifier: String,
-	val name: String,
-	val age: Int
-) : Storable {
-	companion object {
-		fun random(amount: Int): List<UserTest> {
-			val users = mutableListOf<UserTest>()
+class RepositoryDebuggingHandler(private val target: Any, private val logger: Logger) : InvocationHandler {
 
-			for (i in 0..amount) {
-				users.add(
-					UserTest(
-						UUID.randomUUID().toString(),
-						"Test User Name | $i",
-						i
-					)
-				)
-			}
+	private val methods = mutableMapOf<String, Method>()
 
-			return users
+	init {
+		for (method in target.javaClass.declaredMethods) {
+			methods[method.name] = method
 		}
 	}
+	override fun invoke(proxy: Any?, method: Method?, args: Array<out Any>?): Any {
+		method?.let {
+			val startTime = System.currentTimeMillis()
+			val result = methods[it.name]?.invoke(target, *(args ?: emptyArray()))
+
+			logger.info("It took ${System.currentTimeMillis() - startTime} ms to execute ${it.name} on the ${target.javaClass.simpleName} class.")
+
+			return result!!
+		} ?: throw IllegalArgumentException("Method parameter is null.")
+	}
+
 }

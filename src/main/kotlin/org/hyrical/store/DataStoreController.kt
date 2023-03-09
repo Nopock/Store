@@ -1,7 +1,7 @@
 /*
  * MIT License
  *
- * Copyright (c) 2023 Nathan Weisz
+ * Copyright (c) 2023 Nathan
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -26,11 +26,14 @@ package org.hyrical.store
 
 import com.google.common.collect.HashBasedTable
 import org.hyrical.store.connection.DatabaseConnection
+import org.hyrical.store.debugging.RepositoryDebuggingHandler
 import org.hyrical.store.repository.AsyncRepository
 import org.hyrical.store.repository.CoroutineRepository
 import org.hyrical.store.repository.ReactiveRepository
 import org.hyrical.store.repository.Repository
 import org.hyrical.store.type.StorageType
+import java.lang.reflect.Proxy
+import java.util.logging.Logger
 
 /**
  * The object that handles creating new [Repository]'s and
@@ -45,7 +48,9 @@ import org.hyrical.store.type.StorageType
 class DataStoreController<T : Storable>(
 	private val type: StorageType,
 	val classType: Class<T>,
-	val connection: DatabaseConnection<*, *>?
+	val connection: DatabaseConnection<*, *>,
+	private val debug: Boolean,
+	private val logger: Logger?
 ) {
 
 	init {
@@ -76,56 +81,86 @@ class DataStoreController<T : Storable>(
 		 * the specified [StorageType]
 		 *
 		 * @param [type] An objects that implements [Storable] (The type of data to be stored)
+		 * @param [connection] the specified [DatabaseConnection] for the right repository
+		 * @param [debug] If we should log debug statistics (defaulted to false)
+		 * @param [logger] The logger to use for debugging only provide if [debug] is true
 		 *
 		 * @see [DataStoreController]
 		 */
 		inline fun <reified T : Storable> of(
 			type: StorageType,
-			connection: DatabaseConnection<*, *>? = null
+			connection: DatabaseConnection<*, *>,
+			debug: Boolean = false,
+			logger: Logger? = null
 		): DataStoreController<T> {
-			return DataStoreController(type, T::class.java, connection)
+			return DataStoreController(type, T::class.java, connection, debug, logger)
 		}
 
 		@JvmStatic
 		fun <T : Storable> of(
 			type: StorageType,
 			t: Class<T>,
-			connection: DatabaseConnection<*, *>? = null
+			connection: DatabaseConnection<*, *>,
+			debug: Boolean = false,
+			logger: Logger? = null
 		): DataStoreController<T> {
-			return DataStoreController(type, t, connection)
+			return DataStoreController(type, t, connection, debug, logger)
 		}
 	}
 
-	// We do this lazy cause maybe they don't use a repo only async or reactive
 	val repository: Repository<T> by lazy {
-		type.build(this, connection)
+		val objType = type.build(this, connection)
+
+		if (debug) {
+			return@lazy Proxy.newProxyInstance(
+				objType.javaClass.classLoader,
+				objType.javaClass.interfaces,
+				RepositoryDebuggingHandler(objType, logger!!)
+			) as Repository<T>
+		}
+
+		return@lazy objType
 	}
 
 	val asyncRepository: AsyncRepository<T> by lazy {
-		type.buildAsync(this, connection)
+		val objType = type.buildAsync(this, connection)
+
+		if (debug) {
+			return@lazy Proxy.newProxyInstance(
+				objType.javaClass.classLoader,
+				objType.javaClass.interfaces,
+				RepositoryDebuggingHandler(objType, logger!!)
+			) as AsyncRepository<T>
+		}
+
+		return@lazy objType
 	}
 
 	val reactiveRepository: ReactiveRepository<T> by lazy {
-		type.buildReactive(this, connection)
+		val objType = type.buildReactive(this, connection)
+
+		if (debug) {
+			return@lazy Proxy.newProxyInstance(
+				objType.javaClass.classLoader,
+				objType.javaClass.interfaces,
+				RepositoryDebuggingHandler(objType, logger!!)
+			) as ReactiveRepository<T>
+		}
+
+		return@lazy objType
 	}
 
 	val coroutineRepository: CoroutineRepository<T> by lazy {
-		type.buildCoroutine(this, connection)
-	}
+		val objType = type.buildCoroutine(this, connection)
 
-	var directory: String = ""
-
-	/**
-	 * Sets the directory to be used when persisting data
-	 * with the [StorageType.FLAT_FILE]
-	 *
-	 * @param [directory] The directory to be used.
-	 */
-	fun bindFlatFileDirectory(directory: String) {
-		if (type == StorageType.FLAT_FILE) {
-			this.directory = directory
-		} else {
-			throw UnsupportedOperationException("You attempted to bind a flat file directory to a non flat file DataStoreController!!")
+		if (debug) {
+			return@lazy Proxy.newProxyInstance(
+				objType.javaClass.classLoader,
+				objType.javaClass.interfaces,
+				RepositoryDebuggingHandler(objType, logger!!)
+			) as CoroutineRepository<T>
 		}
+
+		return@lazy objType
 	}
 }

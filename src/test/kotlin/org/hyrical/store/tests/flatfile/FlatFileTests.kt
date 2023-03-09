@@ -1,7 +1,7 @@
 /*
  * MIT License
  *
- * Copyright (c) 2023 Nathan Weisz
+ * Copyright (c) 2023 Nathan
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -29,6 +29,7 @@ import org.hyrical.store.connection.flatfile.FlatFileConnection
 import org.hyrical.store.tests.obj.UserTest
 import org.hyrical.store.type.StorageType
 import org.junit.jupiter.api.Test
+import java.util.logging.Logger
 import kotlin.test.assertEquals
 
 class FlatFileTests {
@@ -39,7 +40,9 @@ class FlatFileTests {
 			FlatFileConnection(
 				FlatFileTests::class.java.protectionDomain.codeSource.location.toURI().path,
 				"flatfile_tests"
-			)
+			),
+			false,
+			Logger.getLogger("Flat-File-Test")
 		)
 	}
 
