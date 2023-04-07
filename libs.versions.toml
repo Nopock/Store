@@ -1,6 +1,6 @@
 [versions]
 redis = "4.3.2"
-mongo = "3.12.12"
+mongo = "3.12.13"
 reactor-core = "3.5.4"
 gson = "2.10.1"
 coroutines = "1.6.4"
