@@ -1,7 +1,7 @@
 [versions]
 redis = "4.3.2"
 mongo = "3.12.13"
-reactor-core = "3.5.4"
+reactor-core = "3.5.5"
 gson = "2.10.1"
 coroutines = "1.6.4"
 guava = "31.1-jre"
