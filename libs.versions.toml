@@ -1,5 +1,5 @@
 [versions]
-redis = "4.3.2"
+redis = "4.4.0"
 mongo = "3.12.13"
 reactor-core = "3.5.5"
 gson = "2.10.1"
