@@ -3,7 +3,7 @@ redis = "4.4.0"
 mongo = "3.12.13"
 reactor-core = "3.5.5"
 gson = "2.10.1"
-coroutines = "1.6.4"
+coroutines = "1.7.0"
 guava = "31.1-jre"
 
 [libraries]
