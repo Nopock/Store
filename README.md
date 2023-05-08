@@ -61,7 +61,10 @@
 ## Usage
 
 ```kt
-    DataTypeResources.enableMongoRepositories("localhost", 27017, "Database")
+
+// This Database Connection system is currently Deprecated...
+// for updated examples check out https://nopox.gitbook.io/libraries/products/store
+DataTypeResources.enableMongoRepositories("localhost", 27017, "Database")
 
 val controller = DataStoreController.of<ExampleData>(StorageType.MONGO)
 
