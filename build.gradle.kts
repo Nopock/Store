@@ -2,7 +2,7 @@ import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
 plugins {
 	kotlin("jvm") version "1.9.10"
-	id("org.jetbrains.dokka") version "1.8.10"
+	id("org.jetbrains.dokka") version "1.9.0"
 	id("maven-publish")
 	id("java-library")
 }
