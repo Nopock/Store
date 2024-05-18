@@ -106,6 +106,4 @@ Copyright © 2022 [Nathan](https://github.com/Nopock).<br />
 This project is [MIT](https://github.com/Nopock/Store/blob/main/LICENSE) licensed.
 
 ***
-
-Database connection system skidded from Growly <3
 <p></p>
